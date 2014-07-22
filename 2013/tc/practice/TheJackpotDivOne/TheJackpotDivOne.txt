@@ -1,0 +1,78 @@
+Problem Statement
+
+John has recently won a jackpot, but he doesn't need the money.
+He decided to share it with his friends instead.
+He knows how much money each of his friends has, and he will use this information to perform the distribution.
+While he still has money left, he will repeat the following steps:
+
+Calculate the average amount of money each of his friends has.  Call this value A.Choose the poorest friend.  If there are multiple poorest friends, choose one of them randomly.  P is the amount of money owned by the chosen friend.Determine the value of X, where X is the smallest integer such that P + X is strictly greater than A.If John has at least X dollars, give X dollars to the chosen friend.  Otherwise, give all the remaining money to that friend.You are given a longjackpot, the number of dollars John has won, and a long[]money, where the i-th element is the number of dollars currently owned by the i-th friend.
+Return a long[] containing the same number of elements as money.
+The return value must contain the number of dollars owned by each friend after John has performed the above distribution, sorted in non-decreasing order.
+
+Definition
+
+Class:  TheJackpotDivOne  
+
+Method:  find  
+
+Parameters:  long[], long  
+
+Returns:  long[]  
+
+Method signature:  long[] find(long[] money, long jackpot)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  moneywill contain between 1 and 47 elements, inclusive.  
+
+-  Each element ofmoneywill be between 1 and 10^18, inclusive.  
+
+-  jackpotwill be between 1 and 10^18, inclusive.  
+
+Examples
+
+0)  
+
+{1, 2, 3, 4}
+
+2
+
+Returns: {2, 3, 3, 4 }
+
+The average is 2.5. John will give all his money to the first friend with a single action.  
+
+1)  
+
+{4}
+
+7
+
+Returns: {11 }
+
+There is just one friend here.  
+
+2)  
+
+{4, 44, 7, 77}
+
+47
+
+Returns: {24, 34, 44, 77 }
+
+Iniitially, the average is 33, so John will give 30 dollars to the first friend, who will then have 34 dollars total.  The average then becomes 40.5, and John will give the rest of the money to the third friend.  
+
+3)  
+
+{4, 10, 8, 3, 6, 5, 8, 3, 7, 5}
+
+1000
+
+Returns: {105, 106, 106, 106, 106, 106, 106, 106, 106, 106 }
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: Vasyl[alphacom]
+Contest name: SRM 504.5

@@ -1,0 +1,89 @@
+Problem Statement
+
+It is a common practice in cryptography to remove the spaces from a message 
+before encoding it to help to disguise its structure. 
+Even after it is then decoded, we are left with the
+problem of putting the spaces back in the message.Create a class MessageMess that contains a method restore that 
+takes a String[]dictionaryof possible words and
+a Stringmessageas inputs. It returns the message with single spaces inserted to divide themessageinto words from thedictionary.  If there is more than one way to insert spaces, it returns "AMBIGUOUS!"  If there is no way to insert spaces, it returns "IMPOSSIBLE!" The return should never
+have any leading or trailing spaces.
+
+Definition
+
+Class:  MessageMess  
+
+Method:  restore  
+
+Parameters:  String[], String  
+
+Returns:  String  
+
+Method signature:  String restore(String[] dictionary, String message)  
+
+(be sure your method is public)  
+
+Notes
+
+-  Don't forget the '!' at the end of the two special returns  
+
+-  A proper message may require 0 spaces to be inserted  
+
+Constraints
+
+-  dictionarywill contain between 1 and 50 elements inclusive  
+
+-  the elements ofdictionarywill be distinct  
+
+-  each element ofdictionarywill contain between 1 and 50 characters  
+
+-  messagewill contain between 1 and 50 characters  
+
+-  every character inmessageand in each element ofdictionarywill be an uppercase letter 'A'-'Z'  
+
+Examples
+
+0)  
+
+{"HI", "YOU", "SAY"}
+
+"HIYOUSAYHI"
+
+Returns: "HI YOU SAY HI"
+
+A word fromdictionarymay appear multiple times in themessage.  
+
+1)  
+
+{"ABC", "BCD", "CD", "ABCB"}
+
+"ABCBCD"
+
+Returns: "AMBIGUOUS!"
+
+"ABC BCD" and "ABCB CD" are both possible interpretations ofmessage.  
+
+2)  
+
+{"IMPOSS", "SIBLE", "S"}
+
+"IMPOSSIBLE"
+
+Returns: "IMPOSSIBLE!"
+
+There is no way to concatenate words from thisdictionaryto form "IMPOSSIBLE"  
+
+3)  
+
+{"IMPOSS", "SIBLE", "S", "IMPOSSIBLE"}
+
+"IMPOSSIBLE"
+
+Returns: "IMPOSSIBLE"
+
+Thismessagecan be decoded without ambiguity. This requires the insertion of no spaces since the entiremessageappears as a word in thedictionary.  
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: dgoodman
+Contest name: SRM 149

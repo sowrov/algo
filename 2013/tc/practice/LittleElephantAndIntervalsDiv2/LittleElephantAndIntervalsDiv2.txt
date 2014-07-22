@@ -1,0 +1,103 @@
+Problem Statement
+
+Little Elephant from the Zoo of Lviv has some balls arranged in a row. Each ball can be painted in one of two possible colors: black or white. Initially all the balls are painted white.
+
+You are given an intM, which represents the number of balls in the row. 
+The balls are numbered from left to right, starting from 1. 
+You are also given two int[]sLandR. 
+To repaint balls, Little Elephant wants to use a robot. 
+The robot will paint the balls in several consecutive stages.
+For each i, the i-th stage (1-based index) will look as follows:
+First, the robot will choose one of the two colors: white or black.
+Then, the robot will paint the balls with indices fromL[i-1] toR[i-1], inclusive, using the chosen color.
+(Painting a ball covers all previous layers of paint.)
+
+Return the number of different colorings Little Elephant can get after the last stage. (Two colorings are considered different if there exists some ball that is white in one coloring and black in the other one).
+
+Definition
+
+Class:  LittleElephantAndIntervalsDiv2  
+
+Method:  getNumber  
+
+Parameters:  int, int[], int[]  
+
+Returns:  int  
+
+Method signature:  int getNumber(int M, int[] L, int[] R)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  Mwill be between 1 and 100, inclusive.  
+
+-  Lwill contain between 1 and 10 elements, inclusive.  
+
+-  Rwill contain the same number of elements asL.  
+
+-  Each element ofRwill be between 1 andM, inclusive.  
+
+-  i-th element ofLwill be between 1 andR[i], inclusive.  
+
+Examples
+
+0)  
+
+4
+
+{1, 2, 3}
+
+{1, 2, 3}
+
+Returns: 8
+
+In the three stages the robot will choose the color for balls number 1, 2, and 3. The choices are independent of each other. The last, fourth ball will always remain white. Thus there are 2*2*2 = 8 different colorings.  
+
+1)  
+
+3
+
+{1, 1, 2}
+
+{3, 1, 3}
+
+Returns: 4
+
+In the first stage the robot colors all three balls. The color chosen for the first stage does not matter, because in the second stage the robot will repaint ball 1, and in the third stage it will repaint balls 2 and 3.  
+
+2)  
+
+100
+
+{47}
+
+{74}
+
+Returns: 2
+
+3)  
+
+100
+
+{10, 20, 50}
+
+{20, 50, 100}
+
+Returns: 8
+
+4)  
+
+42
+
+{5, 23, 4, 1, 15, 2, 22, 26, 13, 16}
+
+{30, 41, 17, 1, 21, 6, 28, 30, 15, 19}
+
+Returns: 512
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: Witaliy
+Contest name: SRM 595

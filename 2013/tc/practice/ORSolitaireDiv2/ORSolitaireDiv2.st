@@ -1,0 +1,7 @@
+ORSolitaireDiv2
+Brute Force, Greedy
+D2L2
+0:00:20.856
+2014-01-02 17:31:05
+2014-01-02 17:59:48
+

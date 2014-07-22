@@ -1,0 +1,6 @@
+TypoCoderDiv1
+Dynamic Programming
+D1L1
+0:04:50.397
+2013-12-31 21:09:03
+2013-12-31 22:02:59

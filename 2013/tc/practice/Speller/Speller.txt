@@ -1,0 +1,70 @@
+Problem Statement
+
+I need software that can read written numbers and convert them to integers.
+The numbers are always between 1 and 99 inclusive, but may be misspelled.
+The correct spelling of numbers is given by the following grammar, in which
+'<' '>' '::=' and '|' are metacharacters and all others are literal:<NUMBER> ::= <ONES> | <TEEN> | <TENS> | <TENS>-<ONES><ONES> ::= one | two | three | four | five | six | seven | eight | nine<TEEN> ::= ten | eleven | twelve | thirteen | fourteen | fifteen | 
+                 sixteen | seventeen | eighteen  | nineteen<TENS> ::= twenty | thirty | forty | fifty | sixty | seventy | eighty | ninetyCreate a class Speller that contains a method value that is given a Stringnumberand that returns the integer value whose correct spelling is closest tonumber.
+The distance between two spellings is defined to be the number of characters in one
+of the spellings that would need to be changed to a different character in order
+to make them match, where matching is case sensitive. Two spellings of different lengths are considered 
+to be infinitely far apart.The method should return -1 if there is more than one value that is closest tonumber.
+
+Definition
+
+Class:  Speller  
+
+Method:  value  
+
+Parameters:  String  
+
+Returns:  int  
+
+Method signature:  int value(String number)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  numberwill contain between 1 and 20 characters inclusive.  
+
+-  Each character innumberwill be between ASCII 33 and ASCII 126 inclusive.  
+
+Examples
+
+0)  
+
+"forty-two"
+
+Returns: 42
+
+1)  
+
+"FORTY-TWO"
+
+Returns: -1
+
+"forty-two" and " fifty-two" are both a distance of 8 from "FORTY-TWO".
+   No other number is closer.  
+
+2)  
+
+"eightene"
+
+Returns: 18
+
+"eighteen" is 2 misspelled letters away from "eightene"  
+
+3)  
+
+"fi"
+
+Returns: -1
+
+All numbers are infinitely far away, since there are no 2 character strings that represent numbers.  
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: dgoodman
+Contest name: SRM 247

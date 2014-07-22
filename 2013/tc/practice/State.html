@@ -1,0 +1,488 @@
+<html><head><title>Problem state</title><script type='text/javascript'>
+/*
+  SortTable
+  version 2
+  7th April 2007
+  Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
+
+  Thanks to many, many people for contributions and suggestions.
+  Licenced as X11: http://www.kryogenix.org/code/browser/licence.html
+  This basically means: do what you want with it.
+*/
+
+var stIsIE = /*@cc_on!@*/false;
+
+sorttable = {
+  init: function() {
+    // quit if this function has already been called
+    if (arguments.callee.done) return;
+    // flag this function so we don't do the same thing twice
+    arguments.callee.done = true;
+    // kill the timer
+    if (_timer) clearInterval(_timer);
+
+    if (!document.createElement || !document.getElementsByTagName) return;
+
+    sorttable.DATE_RE = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
+
+    forEach(document.getElementsByTagName('table'), function(table) {
+      if (table.className.search(/\bsortable\b/) != -1) {
+        sorttable.makeSortable(table);
+      }
+    });
+
+  },
+
+  makeSortable: function(table) {
+    if (table.getElementsByTagName('thead').length == 0) {
+      // table doesn't have a tHead. Since it should have, create one and
+      // put the first table row in it.
+      the = document.createElement('thead');
+      the.appendChild(table.rows[0]);
+      table.insertBefore(the,table.firstChild);
+    }
+    // Safari doesn't support table.tHead, sigh
+    if (table.tHead == null) table.tHead = table.getElementsByTagName('thead')[0];
+
+    if (table.tHead.rows.length != 1) return; // can't cope with two header rows
+
+    // Sorttable v1 put rows with a class of "sortbottom" at the bottom (as
+    // "total" rows, for example). This is B&R, since what you're supposed
+    // to do is put them in a tfoot. So, if there are sortbottom rows,
+    // for backwards compatibility, move them to tfoot (creating it if needed).
+    sortbottomrows = [];
+    for (var i=0; i<table.rows.length; i++) {
+      if (table.rows[i].className.search(/\bsortbottom\b/) != -1) {
+        sortbottomrows[sortbottomrows.length] = table.rows[i];
+      }
+    }
+    if (sortbottomrows) {
+      if (table.tFoot == null) {
+        // table doesn't have a tfoot. Create one.
+        tfo = document.createElement('tfoot');
+        table.appendChild(tfo);
+      }
+      for (var i=0; i<sortbottomrows.length; i++) {
+        tfo.appendChild(sortbottomrows[i]);
+      }
+      delete sortbottomrows;
+    }
+
+    // work through each column and calculate its type
+    headrow = table.tHead.rows[0].cells;
+    for (var i=0; i<headrow.length; i++) {
+      // manually override the type with a sorttable_type attribute
+      if (!headrow[i].className.match(/\bsorttable_nosort\b/)) { // skip this col
+        mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
+        if (mtch) { override = mtch[1]; }
+          if (mtch && typeof sorttable["sort_"+override] == 'function') {
+            headrow[i].sorttable_sortfunction = sorttable["sort_"+override];
+          } else {
+            headrow[i].sorttable_sortfunction = sorttable.guessType(table,i);
+          }
+          // make it clickable to sort
+          headrow[i].sorttable_columnindex = i;
+          headrow[i].sorttable_tbody = table.tBodies[0];
+          dean_addEvent(headrow[i],"click", sorttable.innerSortFunction = function(e) {
+
+          if (this.className.search(/\bsorttable_sorted\b/) != -1) {
+            // if we're already sorted by this column, just
+            // reverse the table, which is quicker
+            sorttable.reverse(this.sorttable_tbody);
+            this.className = this.className.replace('sorttable_sorted',
+                                                    'sorttable_sorted_reverse');
+            this.removeChild(document.getElementById('sorttable_sortfwdind'));
+            sortrevind = document.createElement('span');
+            sortrevind.id = "sorttable_sortrevind";
+            sortrevind.innerHTML = stIsIE ? '&nbsp<font face="webdings">5</font>' : '&nbsp;&#x25B4;';
+            this.appendChild(sortrevind);
+            return;
+          }
+          if (this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
+            // if we're already sorted by this column in reverse, just
+            // re-reverse the table, which is quicker
+            sorttable.reverse(this.sorttable_tbody);
+            this.className = this.className.replace('sorttable_sorted_reverse',
+                                                    'sorttable_sorted');
+            this.removeChild(document.getElementById('sorttable_sortrevind'));
+            sortfwdind = document.createElement('span');
+            sortfwdind.id = "sorttable_sortfwdind";
+            sortfwdind.innerHTML = stIsIE ? '&nbsp<font face="webdings">6</font>' : '&nbsp;&#x25BE;';
+            this.appendChild(sortfwdind);
+            return;
+          }
+
+          // remove sorttable_sorted classes
+          theadrow = this.parentNode;
+          forEach(theadrow.childNodes, function(cell) {
+            if (cell.nodeType == 1) { // an element
+              cell.className = cell.className.replace('sorttable_sorted_reverse','');
+              cell.className = cell.className.replace('sorttable_sorted','');
+            }
+          });
+          sortfwdind = document.getElementById('sorttable_sortfwdind');
+          if (sortfwdind) { sortfwdind.parentNode.removeChild(sortfwdind); }
+          sortrevind = document.getElementById('sorttable_sortrevind');
+          if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
+
+          this.className += ' sorttable_sorted';
+          sortfwdind = document.createElement('span');
+          sortfwdind.id = "sorttable_sortfwdind";
+          sortfwdind.innerHTML = stIsIE ? '&nbsp<font face="webdings">6</font>' : '&nbsp;&#x25BE;';
+          this.appendChild(sortfwdind);
+
+            // build an array to sort. This is a Schwartzian transform thing,
+            // i.e., we "decorate" each row with the actual sort key,
+            // sort based on the sort keys, and then put the rows back in order
+            // which is a lot faster because you only do getInnerText once per row
+            row_array = [];
+            col = this.sorttable_columnindex;
+            rows = this.sorttable_tbody.rows;
+            for (var j=0; j<rows.length; j++) {
+              row_array[row_array.length] = [sorttable.getInnerText(rows[j].cells[col]), rows[j]];
+            }
+            /* If you want a stable sort, uncomment the following line */
+            //sorttable.shaker_sort(row_array, this.sorttable_sortfunction);
+            /* and comment out this one */
+            row_array.sort(this.sorttable_sortfunction);
+
+            tb = this.sorttable_tbody;
+            for (var j=0; j<row_array.length; j++) {
+              tb.appendChild(row_array[j][1]);
+            }
+
+            delete row_array;
+          });
+        }
+    }
+  },
+
+  guessType: function(table, column) {
+    // guess the type of a column based on its first non-blank row
+    sortfn = sorttable.sort_alpha;
+    for (var i=0; i<table.tBodies[0].rows.length; i++) {
+      text = sorttable.getInnerText(table.tBodies[0].rows[i].cells[column]);
+      if (text != '') {
+        if (text.match(/^-?[£$¤]?[\d,.]+%?$/)) {
+          return sorttable.sort_numeric;
+        }
+        // check for a date: dd/mm/yyyy or dd/mm/yy
+        // can have / or . or - as separator
+        // can be mm/dd as well
+        possdate = text.match(sorttable.DATE_RE)
+        if (possdate) {
+          // looks like a date
+          first = parseInt(possdate[1]);
+          second = parseInt(possdate[2]);
+          if (first > 12) {
+            // definitely dd/mm
+            return sorttable.sort_ddmm;
+          } else if (second > 12) {
+            return sorttable.sort_mmdd;
+          } else {
+            // looks like a date, but we can't tell which, so assume
+            // that it's dd/mm (English imperialism!) and keep looking
+            sortfn = sorttable.sort_ddmm;
+          }
+        }
+      }
+    }
+    return sortfn;
+  },
+
+  getInnerText: function(node) {
+    // gets the text we want to use for sorting for a cell.
+    // strips leading and trailing whitespace.
+    // this is *not* a generic getInnerText function; it's special to sorttable.
+    // for example, you can override the cell text with a customkey attribute.
+    // it also gets .value for <input> fields.
+
+    if (!node) return "";
+
+    hasInputs = (typeof node.getElementsByTagName == 'function') &&
+                 node.getElementsByTagName('input').length;
+
+    if (node.getAttribute("sorttable_customkey") != null) {
+      return node.getAttribute("sorttable_customkey");
+    }
+    else if (typeof node.textContent != 'undefined' && !hasInputs) {
+      return node.textContent.replace(/^\s+|\s+$/g, '');
+    }
+    else if (typeof node.innerText != 'undefined' && !hasInputs) {
+      return node.innerText.replace(/^\s+|\s+$/g, '');
+    }
+    else if (typeof node.text != 'undefined' && !hasInputs) {
+      return node.text.replace(/^\s+|\s+$/g, '');
+    }
+    else {
+      switch (node.nodeType) {
+        case 3:
+          if (node.nodeName.toLowerCase() == 'input') {
+            return node.value.replace(/^\s+|\s+$/g, '');
+          }
+        case 4:
+          return node.nodeValue.replace(/^\s+|\s+$/g, '');
+          break;
+        case 1:
+        case 11:
+          var innerText = '';
+          for (var i = 0; i < node.childNodes.length; i++) {
+            innerText += sorttable.getInnerText(node.childNodes[i]);
+          }
+          return innerText.replace(/^\s+|\s+$/g, '');
+          break;
+        default:
+          return '';
+      }
+    }
+  },
+
+  reverse: function(tbody) {
+    // reverse the rows in a tbody
+    newrows = [];
+    for (var i=0; i<tbody.rows.length; i++) {
+      newrows[newrows.length] = tbody.rows[i];
+    }
+    for (var i=newrows.length-1; i>=0; i--) {
+       tbody.appendChild(newrows[i]);
+    }
+    delete newrows;
+  },
+
+  /* sort functions
+     each sort function takes two parameters, a and b
+     you are comparing a[0] and b[0] */
+  sort_numeric: function(a,b) {
+    aa = parseFloat(a[0].replace(/[^0-9.-]/g,''));
+    if (isNaN(aa)) aa = 0;
+    bb = parseFloat(b[0].replace(/[^0-9.-]/g,''));
+    if (isNaN(bb)) bb = 0;
+    return aa-bb;
+  },
+  sort_alpha: function(a,b) {
+    if (a[0]==b[0]) return 0;
+    if (a[0]<b[0]) return -1;
+    return 1;
+  },
+  sort_ddmm: function(a,b) {
+    mtch = a[0].match(sorttable.DATE_RE);
+    y = mtch[3]; m = mtch[2]; d = mtch[1];
+    if (m.length == 1) m = '0'+m;
+    if (d.length == 1) d = '0'+d;
+    dt1 = y+m+d;
+    mtch = b[0].match(sorttable.DATE_RE);
+    y = mtch[3]; m = mtch[2]; d = mtch[1];
+    if (m.length == 1) m = '0'+m;
+    if (d.length == 1) d = '0'+d;
+    dt2 = y+m+d;
+    if (dt1==dt2) return 0;
+    if (dt1<dt2) return -1;
+    return 1;
+  },
+  sort_mmdd: function(a,b) {
+    mtch = a[0].match(sorttable.DATE_RE);
+    y = mtch[3]; d = mtch[2]; m = mtch[1];
+    if (m.length == 1) m = '0'+m;
+    if (d.length == 1) d = '0'+d;
+    dt1 = y+m+d;
+    mtch = b[0].match(sorttable.DATE_RE);
+    y = mtch[3]; d = mtch[2]; m = mtch[1];
+    if (m.length == 1) m = '0'+m;
+    if (d.length == 1) d = '0'+d;
+    dt2 = y+m+d;
+    if (dt1==dt2) return 0;
+    if (dt1<dt2) return -1;
+    return 1;
+  },
+
+  shaker_sort: function(list, comp_func) {
+    // A stable sort function to allow multi-level sorting of data
+    // see: http://en.wikipedia.org/wiki/Cocktail_sort
+    // thanks to Joseph Nahmias
+    var b = 0;
+    var t = list.length - 1;
+    var swap = true;
+
+    while(swap) {
+        swap = false;
+        for(var i = b; i < t; ++i) {
+            if ( comp_func(list[i], list[i+1]) > 0 ) {
+                var q = list[i]; list[i] = list[i+1]; list[i+1] = q;
+                swap = true;
+            }
+        } // for
+        t--;
+
+        if (!swap) break;
+
+        for(var i = t; i > b; --i) {
+            if ( comp_func(list[i], list[i-1]) < 0 ) {
+                var q = list[i]; list[i] = list[i-1]; list[i-1] = q;
+                swap = true;
+            }
+        } // for
+        b++;
+
+    } // while(swap)
+  }
+}
+
+/* ******************************************************************
+   Supporting functions: bundled here to avoid depending on a library
+   ****************************************************************** */
+
+// Dean Edwards/Matthias Miller/John Resig
+
+/* for Mozilla/Opera9 */
+if (document.addEventListener) {
+    document.addEventListener("DOMContentLoaded", sorttable.init, false);
+}
+
+/* for Internet Explorer */
+/*@cc_on @*/
+/*@if (@_win32)
+    document.write("<script id=__ie_onload defer src=javascript:void(0)><\/script>");
+    var script = document.getElementById("__ie_onload");
+    script.onreadystatechange = function() {
+        if (this.readyState == "complete") {
+            sorttable.init(); // call the onload handler
+        }
+    };
+/*@end @*/
+
+/* for Safari */
+if (/WebKit/i.test(navigator.userAgent)) { // sniff
+    var _timer = setInterval(function() {
+        if (/loaded|complete/.test(document.readyState)) {
+            sorttable.init(); // call the onload handler
+        }
+    }, 10);
+}
+
+/* for other browsers */
+window.onload = sorttable.init;
+
+// written by Dean Edwards, 2005
+// with input from Tino Zijdel, Matthias Miller, Diego Perini
+
+// http://dean.edwards.name/weblog/2005/10/add-event/
+
+function dean_addEvent(element, type, handler) {
+    if (element.addEventListener) {
+        element.addEventListener(type, handler, false);
+    } else {
+        // assign each event handler a unique ID
+        if (!handler.$$guid) handler.$$guid = dean_addEvent.guid++;
+        // create a hash table of event types for the element
+        if (!element.events) element.events = {};
+        // create a hash table of event handlers for each element/event pair
+        var handlers = element.events[type];
+        if (!handlers) {
+            handlers = element.events[type] = {};
+            // store the existing event handler (if there is one)
+            if (element["on" + type]) {
+                handlers[0] = element["on" + type];
+            }
+        }
+        // store the event handler in the hash table
+        handlers[handler.$$guid] = handler;
+        // assign a global event handler to do all the work
+        element["on" + type] = handleEvent;
+    }
+};
+// a counter used to create unique IDs
+dean_addEvent.guid = 1;
+
+function removeEvent(element, type, handler) {
+    if (element.removeEventListener) {
+        element.removeEventListener(type, handler, false);
+    } else {
+        // delete the event handler from the hash table
+        if (element.events && element.events[type]) {
+            delete element.events[type][handler.$$guid];
+        }
+    }
+};
+
+function handleEvent(event) {
+    var returnValue = true;
+    // grab the event object (IE uses a global event object)
+    event = event || fixEvent(((this.ownerDocument || this.document || this).parentWindow || window).event);
+    // get a reference to the hash table of event handlers
+    var handlers = this.events[event.type];
+    // execute each event handler
+    for (var i in handlers) {
+        this.$$handleEvent = handlers[i];
+        if (this.$$handleEvent(event) === false) {
+            returnValue = false;
+        }
+    }
+    return returnValue;
+};
+
+function fixEvent(event) {
+    // add W3C standard event methods
+    event.preventDefault = fixEvent.preventDefault;
+    event.stopPropagation = fixEvent.stopPropagation;
+    return event;
+};
+fixEvent.preventDefault = function() {
+    this.returnValue = false;
+};
+fixEvent.stopPropagation = function() {
+  this.cancelBubble = true;
+}
+
+// Dean's forEach: http://dean.edwards.name/base/forEach.js
+/*
+    forEach, version 1.0
+    Copyright 2006, Dean Edwards
+    License: http://www.opensource.org/licenses/mit-license.php
+*/
+
+// array-like enumeration
+if (!Array.forEach) { // mozilla already supports this
+    Array.forEach = function(array, block, context) {
+        for (var i = 0; i < array.length; i++) {
+            block.call(context, array[i], i, array);
+        }
+    };
+}
+
+// generic enumeration
+Function.prototype.forEach = function(object, block, context) {
+    for (var key in object) {
+        if (typeof this.prototype[key] == "undefined") {
+            block.call(context, object[key], key, object);
+        }
+    }
+};
+
+// character enumeration
+    String.forEach = function(string, block, context) {
+    Array.forEach(string.split(""), function(chr, index) {
+    block.call(context, chr, index, string);
+    });
+    };    // globally resolve forEach enumeration
+var forEach = function(object, block, context) {
+    if (object) {
+        var resolve = Object; // default
+        if (object instanceof Function) {
+            // functions have a "length" property
+            resolve = Function;
+        } else if (object.forEach instanceof Function) {
+            // the object implements a custom forEach method so use that
+            object.forEach(block, context);
+            return;
+        } else if (typeof object == "string") {
+            // the object is a string
+            resolve = String;
+        } else if (typeof object.length == "number") {
+            // the object is array-like
+            resolve = Array;
+        }
+        resolve.forEach(object, block, context);
+    }
+};
+</script><style media="screen" type="text/css">                    table {                    *border-collapse: collapse; /* IE7 and lower */                    border-spacing: 0;                    width: 100%;                        }                                        .sortable {                    border: solid #ccc 1px;                    -moz-border-radius: 6px;                    -webkit-border-radius: 6px;                    border-radius: 6px;                    -webkit-box-shadow: 0 1px 1px #ccc;                     -moz-box-shadow: 0 1px 1px #ccc;                     box-shadow: 0 1px 1px #ccc;                             }                                        .sortable tr:hover {                    background: #fbf8e9;                    -o-transition: all 0.1s ease-in-out;                    -webkit-transition: all 0.1s ease-in-out;                    -moz-transition: all 0.1s ease-in-out;                    -ms-transition: all 0.1s ease-in-out;                    transition: all 0.1s ease-in-out;                         }                                            .sortable td, .sortable th {                    border-left: 1px solid #ccc;                    border-top: 1px solid #ccc;                    padding: 10px;                    text-align: left;                        }                                        .sortable th {                    background-color: #dce9f9;                    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));                    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);                    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);                    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);                    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);                    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);                    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;                     -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;                      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;                            border-top: none;                    text-shadow: 0 1px 0 rgba(255,255,255,.5);                     }                                        .sortable td:first-child, .sortable th:first-child {                    border-left: none;                    }                                        .sortable th:first-child {                    -moz-border-radius: 6px 0 0 0;                    -webkit-border-radius: 6px 0 0 0;                    border-radius: 6px 0 0 0;                    }                                        .sortable th:last-child {                    -moz-border-radius: 0 6px 0 0;                    -webkit-border-radius: 0 6px 0 0;                    border-radius: 0 6px 0 0;                    }                                        .sortable th:only-child{                    -moz-border-radius: 6px 6px 0 0;                    -webkit-border-radius: 6px 6px 0 0;                    border-radius: 6px 6px 0 0;                    }                                        .sortable tr:last-child td:first-child {                    -moz-border-radius: 0 0 0 6px;                    -webkit-border-radius: 0 0 0 6px;                    border-radius: 0 0 0 6px;                    }                                        .sortable tr:last-child td:last-child {                    -moz-border-radius: 0 0 6px 0;                    -webkit-border-radius: 0 0 6px 0;                    border-radius: 0 0 6px 0;                    }                    </style></head><body><img src="daypie.gif" style="border:1px dashed black"/>  <img src="monthpie.gif" style="border:1px dashed black" /><img src="levelbar.gif" style="border:1px dashed black"/> <img src="averageTimeBar.gif" style="border:1px dashed black"><table class="sortable"><tr><th>NO.</th><th>Name</th><th>Type</th><th>Level</th><th>Best Time</th><th>Your BestTime</th><th>Start Time</th></tr>
+<tr><td>1&nbsp;</td><td>Abacus&nbsp;</td><td>Simple Math, String Manipulation&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:03:26.43&nbsp;</td><td>00:27:20</td><td>2013-06-18T10:36:23</td></tr><tr><td>2&nbsp;</td><td>AlienAndGame&nbsp;</td><td>Brute Force, Greedy, Simple Search, Iteration&nbsp;</td><td>D2L2&nbsp;</td><td>0:06:26.350&nbsp;</td><td>00:51:36</td><td>2014-01-23T21:50:51</td></tr><tr><td>3&nbsp;</td><td>AlienAndPassword&nbsp;</td><td>Brute Force, String Manipulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:08.320&nbsp;</td><td>00:03:39</td><td>2014-01-22T00:25:02</td></tr><tr><td>4&nbsp;</td><td>ArcadeManao&nbsp;</td><td>Graph Theory, Simple Search, Iteration&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:05:25.537&nbsp;</td><td>00:41:16</td><td>2013-07-03T19:40:23</td></tr><tr><td>5&nbsp;</td><td>AstronomicalRecordsEasy&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D2L2&nbsp;</td><td>0:07:42.362&nbsp;</td><td>In Progress</td><td>2014-01-14T13:20:16</td></tr><tr><td>6&nbsp;</td><td>AvoidRoads&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D1L1&nbsp;</td><td>0:05:15.865&nbsp;</td><td>03:00:00</td><td>2013-03-10T14:03:06</td></tr><tr><td>7&nbsp;</td><td>BadSubstring&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D2L3&nbsp;</td><td>0:07:37.562&nbsp;</td><td>00:12:32</td><td>2013-04-01T11:27:48</td></tr><tr><td>8&nbsp;</td><td>BigFatInteger2&nbsp;</td><td>Math&nbsp;</td><td>D2L2&nbsp;</td><td>0:00:42.487&nbsp;</td><td>00:48:41</td><td>2014-01-03T21:22:33</td></tr><tr><td>9&nbsp;</td><td>BinPackingEasy&nbsp;</td><td>Greedy&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:04.667&nbsp;</td><td>00:16:52</td><td>2014-01-03T22:18:06</td></tr><tr><td>10&nbsp;</td><td>BlockTower&nbsp;</td><td>Brute Force, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:05:32.566&nbsp;</td><td>00:30:54</td><td>2013-07-02T20:19:31</td></tr><tr><td>11&nbsp;</td><td>Books&nbsp;</td><td>Brute Force, Dynamic Programming&nbsp;</td><td>D1L2 & D2L3&nbsp;</td><td>0:04:59.763&nbsp;</td><td>00:25:30</td><td>2013-03-31T14:03:04</td></tr><tr><td>12&nbsp;</td><td>BoxesOfBooks&nbsp;</td><td>Greedy, Simple Math&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:51.13&nbsp;</td><td>00:05:38</td><td>2013-12-31T23:47:58</td></tr><tr><td>13&nbsp;</td><td>ChocolateBar&nbsp;</td><td>Brute Force, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:25.218&nbsp;</td><td>00:09:39</td><td>2013-07-03T00:25:53</td></tr><tr><td>14&nbsp;</td><td>Chopsticks&nbsp;</td><td>Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:18.824&nbsp;</td><td>00:04:24</td><td>2013-06-29T07:49:29</td></tr><tr><td>15&nbsp;</td><td>CityMap&nbsp;</td><td>Simple Search, Iteration, String Parsing&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:19.196&nbsp;</td><td>00:09:08</td><td>2013-06-26T20:45:29</td></tr><tr><td>16&nbsp;</td><td>ColorfulRoad&nbsp;</td><td>Brute Force, Dynamic Programming, Graph Theory&nbsp;</td><td>D2L2&nbsp;</td><td>0:01:29.439&nbsp;</td><td>00:37:24</td><td>2014-01-26T04:53:17</td></tr><tr><td>17&nbsp;</td><td>ComparerInator&nbsp;</td><td>Brute Force, Greedy, Simulation&nbsp;</td><td>D2L1&nbsp;</td><td>&nbsp;</td><td>00:15:00</td><td>2014-02-14T20:15:23</td></tr><tr><td>18&nbsp;</td><td>ConvertibleStrings&nbsp;</td><td>Brute Force, String Manipulation&nbsp;</td><td>D2L2&nbsp;</td><td>0:05:18.416&nbsp;</td><td>In Progress</td><td>2014-01-14T21:25:33</td></tr><tr><td>19&nbsp;</td><td>CucumberMarket&nbsp;</td><td>Brute Force, Greedy, Search, Sorting&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:07.984&nbsp;</td><td>00:08:15</td><td>2013-06-30T22:53:12</td></tr><tr><td>20&nbsp;</td><td>EasyHomework&nbsp;</td><td>Simple Math&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:07.180&nbsp;</td><td>00:06:55</td><td>2013-06-29T07:40:17</td></tr><tr><td>21&nbsp;</td><td>ElectronicScarecrows&nbsp;</td><td>Dynamic Programming, Geometry&nbsp;</td><td>D1L3&nbsp;</td><td>0:22:38.370&nbsp;</td><td>05:00:00</td><td>2013-03-09T11:20:41</td></tr><tr><td>22&nbsp;</td><td>EllysCoprimesDiv2&nbsp;</td><td>Dynamic Programming, Simple Math&nbsp;</td><td>D2L3&nbsp;</td><td>0:05:46.313&nbsp;</td><td>00:32:31</td><td>2013-07-10T23:33:44</td></tr><tr><td>23&nbsp;</td><td>EllysNewNickname&nbsp;</td><td>Simulation, String Manipulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:25.770&nbsp;</td><td>00:10:05</td><td>2013-06-20T02:50:50</td></tr><tr><td>24&nbsp;</td><td>EllysRoomAssignmentsDiv1&nbsp;</td><td>Simple Math, Sorting&nbsp;</td><td>D1L1&nbsp;</td><td>0:04:40.82&nbsp;</td><td>01:15:40</td><td>2013-07-08T20:44:32</td></tr><tr><td>25&nbsp;</td><td>EllysRoomAssignmentsDiv2&nbsp;</td><td>Simple Math, Sorting, String Parsing&nbsp;</td><td>D2L2&nbsp;</td><td>0:16:00.282&nbsp;</td><td>00:29:23</td><td>2013-07-01T22:10:28</td></tr><tr><td>26&nbsp;</td><td>FauxPalindromes&nbsp;</td><td>Simulation, String Manipulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:02:23.878&nbsp;</td><td>00:08:37</td><td>2013-06-30T22:02:07</td></tr><tr><td>27&nbsp;</td><td>FlowerGarden&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D1L2&nbsp;</td><td>0:07:16.169&nbsp;</td><td>03:00:00</td><td>2013-04-23T16:07:07</td></tr><tr><td>28&nbsp;</td><td>FowlRoad&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:03:59.385&nbsp;</td><td>00:08:40</td><td>2013-06-18T10:18:32</td></tr><tr><td>29&nbsp;</td><td>FoxAndFencingEasy&nbsp;</td><td>Greedy, Math&nbsp;</td><td>D2L3&nbsp;</td><td>0:00:11.907&nbsp;</td><td>00:47:33</td><td>2014-01-11T23:15:34</td></tr><tr><td>30&nbsp;</td><td>FoxAndFlowerShopDivTwo&nbsp;</td><td>Brute Force, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:20.292&nbsp;</td><td>00:12:43</td><td>2013-07-12T13:22:19</td></tr><tr><td>31&nbsp;</td><td>FoxAndGame&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:45.936&nbsp;</td><td>00:03:36</td><td>2013-06-30T22:25:20</td></tr><tr><td>32&nbsp;</td><td>FoxAndGo&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L2&nbsp;</td><td>0:10:27.375&nbsp;</td><td>01:16:04</td><td>2014-02-02T17:39:21</td></tr><tr><td>33&nbsp;</td><td>FoxAndHandleEasy&nbsp;</td><td>Simple Search, Iteration, Simulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:45.751&nbsp;</td><td>00:32:07</td><td>2013-06-30T22:19:44</td></tr><tr><td>34&nbsp;</td><td>FoxAndMp3Easy&nbsp;</td><td>Simulation, Sorting&nbsp;</td><td>D2L2&nbsp;</td><td>0:00:51.984&nbsp;</td><td>00:06:50</td><td>2013-07-09T19:37:08</td></tr><tr><td>35&nbsp;</td><td>FoxAndVacation&nbsp;</td><td>Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:07.803&nbsp;</td><td>00:04:16</td><td>2013-06-30T23:03:20</td></tr><tr><td>36&nbsp;</td><td>FoxAndWord&nbsp;</td><td>Simple Search, Iteration, String Manipulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:02:26.560&nbsp;</td><td>00:23:50</td><td>2014-01-22T00:30:40</td></tr><tr><td>37&nbsp;</td><td>FracCount&nbsp;</td><td>Brute Force, Simple Math&nbsp;</td><td>D2L2&nbsp;</td><td>0:05:19.725&nbsp;</td><td>00:40:31</td><td>2013-06-15T11:57:25</td></tr><tr><td>38&nbsp;</td><td>GearsDiv2&nbsp;</td><td>Greedy, Simple Search, Iteration&nbsp;</td><td>D2L2&nbsp;</td><td>0:05:46.933&nbsp;</td><td>00:27:00</td><td>2014-02-02T18:57:23</td></tr><tr><td>39&nbsp;</td><td>GeometricProgressions&nbsp;</td><td>Math, Simulation&nbsp;</td><td>D2L3&nbsp;</td><td>0:12:49.454&nbsp;</td><td>In Progress</td><td>2014-02-03T22:02:19</td></tr><tr><td>40&nbsp;</td><td>GreatFairyWar&nbsp;</td><td>Brute Force, Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:53.23&nbsp;</td><td>00:07:38</td><td>2013-07-02T21:39:01</td></tr><tr><td>41&nbsp;</td><td>IDNumberVerification&nbsp;</td><td>Brute Force, String Manipulation&nbsp;</td><td>D2L2&nbsp;</td><td>0:07:34.477&nbsp;</td><td>00:40:02</td><td>2013-07-09T00:30:04</td></tr><tr><td>42&nbsp;</td><td>LittleElephantAndIntervalsDiv2&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:55.569&nbsp;</td><td>00:34:09</td><td>2014-01-12T23:13:58</td></tr><tr><td>43&nbsp;</td><td>LittleElephantAndString&nbsp;</td><td>Brute Force&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:02:06.601&nbsp;</td><td>In Progress</td><td>2014-01-12T21:43:13</td></tr><tr><td>44&nbsp;</td><td>MafiaGame&nbsp;</td><td>Greedy, Simulation&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:07:49.351&nbsp;</td><td>00:26:29</td><td>2014-02-05T23:13:29</td></tr><tr><td>45&nbsp;</td><td>MessageMess&nbsp;</td><td>Dynamic Programming, Encryption/Compression&nbsp;</td><td>D1L2&nbsp;</td><td>0:08:45.74&nbsp;</td><td>00:20:03</td><td>2013-01-29T10:56:27</td></tr><tr><td>46&nbsp;</td><td>MiddleCode&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:18.599&nbsp;</td><td>00:17:51</td><td>2014-01-22T00:56:41</td></tr><tr><td>47&nbsp;</td><td>MoneyRun&nbsp;</td><td>Brute Force, Dynamic Programming, Recursion, Search&nbsp;</td><td>D1L2&nbsp;</td><td>0:08:24.544&nbsp;</td><td>03:00:00</td><td>2013-04-20T15:16:16</td></tr><tr><td>48&nbsp;</td><td>NextOrPrev&nbsp;</td><td>Greedy, Simple Search, Iteration&nbsp;</td><td>D2L2&nbsp;</td><td>0:09:11.488&nbsp;</td><td>00:27:13</td><td>2013-07-06T17:19:24</td></tr><tr><td>49&nbsp;</td><td>NinjaTurtles&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:57.500&nbsp;</td><td>00:16:05</td><td>2013-12-25T16:22:14</td></tr><tr><td>50&nbsp;</td><td>ORSolitaireDiv2&nbsp;</td><td>Brute Force, Greedy&nbsp;</td><td>D2L2&nbsp;</td><td>0:00:20.856&nbsp;</td><td>00:28:43</td><td>2014-01-02T17:31:05</td></tr><tr><td>51&nbsp;</td><td>PenguinPals&nbsp;</td><td>Greedy&nbsp;</td><td>D2L2&nbsp;</td><td>0:07:47.691&nbsp;</td><td>01:38:34</td><td>2013-07-23T00:05:53</td></tr><tr><td>52&nbsp;</td><td>PenguinTiles&nbsp;</td><td>Simple Math&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:21.729&nbsp;</td><td>00:08:20</td><td>2013-06-29T20:02:04</td></tr><tr><td>53&nbsp;</td><td>PilingRectsDiv2&nbsp;</td><td>Greedy, Search&nbsp;</td><td>D2L2&nbsp;</td><td>0:04:23.538&nbsp;</td><td>01:06:09</td><td>2014-01-25T13:11:54</td></tr><tr><td>54&nbsp;</td><td>PlatypusDuckAndBeaver&nbsp;</td><td>Simple Math, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:02:28.274&nbsp;</td><td>00:11:20</td><td>2013-07-07T16:55:21</td></tr><tr><td>55&nbsp;</td><td>PowerOfThreeEasy&nbsp;</td><td>Math&nbsp;</td><td>D2L2&nbsp;</td><td>0:01:16.611&nbsp;</td><td>00:26:26</td><td>2014-01-12T21:13:36</td></tr><tr><td>56&nbsp;</td><td>RobotHerbDiv2&nbsp;</td><td>Simulation&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:31.66&nbsp;</td><td>00:23:52</td><td>2013-07-09T19:45:53</td></tr><tr><td>57&nbsp;</td><td>RockSkipping&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D1L3&nbsp;</td><td>0:05:57.722&nbsp;</td><td>02:00:00</td><td>2013-05-22T12:37:38</td></tr><tr><td>58&nbsp;</td><td>ShortPalindromes&nbsp;</td><td>Dynamic Programming, Recursion&nbsp;</td><td>D2L3&nbsp;</td><td>0:38:17.616&nbsp;</td><td>03:00:00</td><td>2013-02-15T14:16:59</td></tr><tr><td>59&nbsp;</td><td>SimilarNames2&nbsp;</td><td>Dynamic Programming, Graph Theory, String Manipulation&nbsp;</td><td>D2L3&nbsp;</td><td>0:12:25.404&nbsp;</td><td>00:52:54</td><td>2014-01-11T20:00:27</td></tr><tr><td>60&nbsp;</td><td>SkiResortsEasy&nbsp;</td><td>Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:05.282&nbsp;</td><td>00:07:28</td><td>2013-06-29T07:23:37</td></tr><tr><td>61&nbsp;</td><td>SlimeXSlimeRancher2&nbsp;</td><td>Brute Force, Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:11.149&nbsp;</td><td>00:05:06</td><td>2014-02-14T20:43:57</td></tr><tr><td>62&nbsp;</td><td>SlimeXSlimesCity&nbsp;</td><td>Greedy&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:02:02.323&nbsp;</td><td>01:45:36</td><td>2014-02-14T20:49:45</td></tr><tr><td>63&nbsp;</td><td>Speller&nbsp;</td><td>String Manipulation&nbsp;</td><td>D2L3&nbsp;</td><td>0:11:42.920&nbsp;</td><td>01:06:41</td><td>2013-06-17T14:08:25</td></tr><tr><td>64&nbsp;</td><td>SplitIntoPairs&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L2&nbsp;</td><td>0:00:55.609&nbsp;</td><td>00:24:04</td><td>2014-01-13T17:24:49</td></tr><tr><td>65&nbsp;</td><td>SRMCards&nbsp;</td><td>Dynamic Programming, Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:09.143&nbsp;</td><td>00:21:31</td><td>2014-02-03T21:21:55</td></tr><tr><td>66&nbsp;</td><td>SurroundingGameEasy&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L1&nbsp;</td><td>0:02:08.77&nbsp;</td><td>00:32:11</td><td>2013-07-02T21:03:14</td></tr><tr><td>67&nbsp;</td><td>TeamContestEasy&nbsp;</td><td>Greedy&nbsp;</td><td>D2L2&nbsp;</td><td>0:09:35.23&nbsp;</td><td>00:58:11</td><td>2013-07-06T11:07:47</td></tr><tr><td>68&nbsp;</td><td>TheBrickTowerEasyDivTwo&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:35.568&nbsp;</td><td>00:17:00</td><td>2013-07-06T18:33:00</td></tr><tr><td>69&nbsp;</td><td>TheDeviceDiv2&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L2&nbsp;</td><td>0:04:30.384&nbsp;</td><td>00:48:54</td><td>2013-12-25T16:50:18</td></tr><tr><td>70&nbsp;</td><td>TheExperimentDiv2&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:31.254&nbsp;</td><td>00:14:35</td><td>2013-06-26T20:29:00</td></tr><tr><td>71&nbsp;</td><td>TheJediTestDiv2&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:02:32.733&nbsp;</td><td>00:16:33</td><td>2013-06-29T16:37:00</td></tr><tr><td>72&nbsp;</td><td>TheLotteryBothDivs&nbsp;</td><td>Math, String Manipulation&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:01:45.103&nbsp;</td><td>00:35:31</td><td>2014-02-08T13:01:20</td></tr><tr><td>73&nbsp;</td><td>TheNumberGame&nbsp;</td><td>String Manipulation&nbsp;</td><td>D1L1&nbsp;</td><td>0:03:06.826&nbsp;</td><td>00:25:00</td><td>2013-07-26T16:20:00</td></tr><tr><td>74&nbsp;</td><td>TheNumberGameDiv2&nbsp;</td><td>String Manipulation&nbsp;</td><td>D2L2&nbsp;</td><td>0:04:16.294&nbsp;</td><td>00:38:54</td><td>2013-07-03T22:02:00</td></tr><tr><td>75&nbsp;</td><td>TheNumberGameDivTwo&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:21.173&nbsp;</td><td>00:36:54</td><td>2013-07-03T20:41:00</td></tr><tr><td>76&nbsp;</td><td>ThePriceIsRight&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D1L2 & D2L3&nbsp;</td><td>0:06:25.479&nbsp;</td><td>01:11:00</td><td>2013-02-07T20:24:00</td></tr><tr><td>77&nbsp;</td><td>TheProgrammingContestDivTwo&nbsp;</td><td>Greedy, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:15.820&nbsp;</td><td>00:14:59</td><td>2014-02-08T12:45:00</td></tr><tr><td>78&nbsp;</td><td>TheShuttles&nbsp;</td><td>Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:33.745&nbsp;</td><td>00:12:47</td><td>2014-01-22T01:28:39</td></tr><tr><td>79&nbsp;</td><td>TheSimilarNumbers&nbsp;</td><td>Simple Math&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:47.778&nbsp;</td><td>00:03:16</td><td>2013-06-29T16:54:00</td></tr><tr><td>80&nbsp;</td><td>TheSquareRootDilemma&nbsp;</td><td>Simple Math, Simple Search, Iteration&nbsp;</td><td>D1L1 & D2L2&nbsp;</td><td>0:02:53.596&nbsp;</td><td>02:12:06</td><td>2013-07-13T13:09:00</td></tr><tr><td>81&nbsp;</td><td>TheSwapsDivTwo&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:38.333&nbsp;</td><td>00:57:48</td><td>2013-06-26T20:57:00</td></tr><tr><td>82&nbsp;</td><td>ToastXRaspberry&nbsp;</td><td>Greedy, Simple Math, Simulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:09.605&nbsp;</td><td>00:05:05</td><td>2014-02-14T14:08:48</td></tr><tr><td>83&nbsp;</td><td>TriangleType&nbsp;</td><td>Simple Math&nbsp;</td><td>D2L1&nbsp;</td><td>0:03:32.891&nbsp;</td><td>00:10:00</td><td>2013-06-15T11:45:00</td></tr><tr><td>84&nbsp;</td><td>TypingDistance&nbsp;</td><td>Simulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:41.619&nbsp;</td><td>00:07:23</td><td>2013-07-02T20:08:00</td></tr><tr><td>85&nbsp;</td><td>TypoCoderDiv1&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D1L1&nbsp;</td><td>0:04:50.397&nbsp;</td><td>00:53:56</td><td>2013-12-31T21:09:03</td></tr><tr><td>86&nbsp;</td><td>TypoCoderDiv2&nbsp;</td><td>Simulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:00:16.401&nbsp;</td><td>00:03:45</td><td>2014-01-01T00:00:21</td></tr><tr><td>87&nbsp;</td><td>ValueHistogram&nbsp;</td><td>Simple Search, Iteration, String Manipulation&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:42.158&nbsp;</td><td>00:09:24</td><td>2013-06-29T20:12:00</td></tr><tr><td>88&nbsp;</td><td>WindowWasher&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D2L3&nbsp;</td><td>0:14:17.767&nbsp;</td><td>00:14:00</td><td>2013-03-11T22:33:00</td></tr><tr><td>89&nbsp;</td><td>WinterAndCandies&nbsp;</td><td>Brute Force&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:05.60&nbsp;</td><td>00:17:38</td><td>2014-01-02T02:22:36</td></tr><tr><td>90&nbsp;</td><td>WinterAndMandarins&nbsp;</td><td>Brute Force, Greedy&nbsp;</td><td>D2L1&nbsp;</td><td>0:01:58.645&nbsp;</td><td>00:11:25</td><td>2014-01-22T01:16:01</td></tr><tr><td>91&nbsp;</td><td>WolfDelaymaster&nbsp;</td><td>String Manipulation, String Parsing&nbsp;</td><td>D2L2&nbsp;</td><td>0:03:31.398&nbsp;</td><td>00:13:24</td><td>2014-01-14T17:59:23</td></tr><tr><td>92&nbsp;</td><td>WordParts&nbsp;</td><td>Dynamic Programming&nbsp;</td><td>D2L3&nbsp;</td><td>0:28:00.688&nbsp;</td><td>00:41:00</td><td>2013-02-02T12:39:00</td></tr><tr><td>93&nbsp;</td><td>XorBoardDivTwo&nbsp;</td><td>Brute Force, Simple Search, Iteration&nbsp;</td><td>D2L1&nbsp;</td><td>0:03:37.899&nbsp;</td><td>00:35:47</td><td>2013-07-06T17:51:29</td></tr></table></body></html>

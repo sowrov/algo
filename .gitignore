@@ -194,3 +194,6 @@ FakesAssemblies/
 *.exe
 *.out
 *.app
+!Otocoder.exe
+!StatsGen.exe
+

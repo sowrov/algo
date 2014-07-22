@@ -1,0 +1,103 @@
+Problem Statement
+
+Given a base word,original, and a compound word,compound, decide if the compound word is valid.  A compound word is valid if and only if it is comprised solely of a concatenation of prefixes and/or suffixes oforiginal.  That is, if the compound word can be partitioned intoNparts, such that each part is equal to either a prefix or a suffix oforiginal, then it is valid.  If the word is invalid, return -1.  Otherwise, return the minimum value ofNfor which this is possible.
+
+Definition
+
+Class:  WordParts  
+
+Method:  partCount  
+
+Parameters:  String, String  
+
+Returns:  int  
+
+Method signature:  int partCount(String original, String compound)  
+
+(be sure your method is public)  
+
+Notes
+
+-  The entire base wordoriginalis considered a valid prefix/suffix of itself.  See example 3.  
+
+Constraints
+
+-  originalwill contain between 1 and 50 characters, inclusive.  
+
+-  originalwill consist only of uppercase letters (A-Z).  
+
+-  compoundwill contain between 0 and 50 characters, inclusive.  
+
+-  compoundwill consist only of uppercase letters (A-Z).  
+
+Examples
+
+0)  
+
+"ANTIDISESTABLISHMENTARIANISM"
+
+"ANTIDISIANISMISM"
+
+Returns: 3
+
+"ANTIDISIANISMISM" can be split into "ANTIDIS", "IANISM", and "ISM", all of which are substrings from the beginning or end of the base word.
+
+1)  
+
+"ANTIDISESTABLISHMENTARIANISM"
+
+"ESTABLISHMENT"
+
+Returns: -1
+
+While "ESTABLISHMENT" is contained in "ANTIDISESTABLISHMENTARIANISM", it neither starts at the beginning nor ends at the end of that string.  Furthermore, "ESTABLISHMENT" cannot be broken into any number of parts which satisfy this rule.
+
+2)  
+
+"TOPCODERDOTCOM"
+
+"TOMTMODERDOTCOM"
+
+Returns: 5
+
+The five strings are "TO", "M", "T", "M", and "ODERDOTCOM".  
+
+3)  
+
+"HELLO"
+
+"HELLOHEHELLOLOHELLO"
+
+Returns: 5
+
+Note that the entire original word is considered a valid prefix/suffix.
+
+4)  
+
+"DONTFORGETTHEEMPTYCASE"
+
+""
+
+Returns: 0
+
+5)  
+
+"BAAABA"
+
+"BAAABAAA"
+
+Returns: 2
+
+6)  
+
+"ABBBAABABBBAABBABBABABBABAABBAABBBBBABBABABBABAABB"
+
+"BBBAABABBBAABBABBABABBABAABBAABBBBBABBABABBABAABAA"
+
+Returns: 17
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: LunaticFringe
+Contest name: SRM 156

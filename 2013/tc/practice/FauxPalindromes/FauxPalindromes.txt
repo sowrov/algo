@@ -1,0 +1,84 @@
+Problem Statement
+
+A word is a palindrome if it can be read the same forwards and backwards. For example, the strings "ANA", "AAXAA", "Z" and "XYYYYYX" are palindromes (quotes for clarity).A word is afaux palindromeif, after replacing every group of consecutive equal letters with a single instance of the letter, the resulting word is a palindrome. For example, the string "AAAAANNAA" is a faux palindrome. A detailed explanation why this is a faux palindrome is given below in Example 1.
+Other examples of faux palindromes are the strings "AAAAAAAAAAAAAAAXA and "XYX". Note that every palindrome is also a faux palindrome.You are given a Stringword. You are asked to classify it.Ifwordis a palindrome, return "PALINDROME" (quotes for clarity, returned values are case sensitive).Ifwordis not a palindrome but is a faux palindrome, return "FAUX".In casewordis not a faux palindrome, return "NOT EVEN FAUX".  
+
+Definition
+
+Class:  FauxPalindromes  
+
+Method:  classifyIt  
+
+Parameters:  String  
+
+Returns:  String  
+
+Method signature:  String classifyIt(String word)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  wordwill contain between 1 and 50 characters, inclusive.  
+
+-  The characters inwordwill be upper case letters between 'A' and 'Z', inclusive (quotes for clarity).  
+
+Examples
+
+0)  
+
+"ANA"
+
+Returns: "PALINDROME"
+
+"ANA" reads the same from left to right and right to left.  
+
+1)  
+
+"AAAAANNAA"
+
+Returns: "FAUX"
+
+This is obviously not a palindrome. Now suppose that we replace each group of consecutive equal letters by a single copy of that letter. That is, we change "AAAAA" to "A", "NN" to "N", and "AA" to "A". In this way we will obtain the new string "ANA", which is a palindrome. Hence the original string is a faux palindrome.  
+
+2)  
+
+"LEGENDARY"
+
+Returns: "NOT EVEN FAUX"
+
+The word "LEGENDARY" already does not contain any group of consecutive equal letters and it is not a palindrome.  
+
+3)  
+
+"XXXYTYYTTYX"
+
+Returns: "FAUX"
+
+After replacing the groups of consecutive equal letters with a single letter, the string becomes "XYTYTYX". "XYTYTYX" is a palindrome.  
+
+4)  
+
+"TOPCOODEREDOOCPOT"
+
+Returns: "PALINDROME"
+
+This word contains some groups of consecutive equal letters, but it is already a palindrome without replacing them by single letters.  
+
+5)  
+
+"TOPCODEREDOOCPOT"
+
+Returns: "FAUX"
+
+6)  
+
+"XXXXYYYYYZZXXYYY"
+
+Returns: "NOT EVEN FAUX"
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: vexorian
+Contest name: SRM 564

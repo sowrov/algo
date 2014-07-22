@@ -1,0 +1,99 @@
+Problem Statement
+
+John and Brus are building towers using toy bricks.
+They have two types of bricks: red and blue ones.
+The number of red bricks they have isredCountand each of them has a height ofredHeight.
+The number of blue bricks they have isblueCountand each of them has a height ofblueHeight.
+
+A tower is built by placing bricks one atop another.
+A brick can be placed either on the ground, or on a brick of a different color.
+(I.e., you are not allowed to put two bricks of the same color immediately on one another.)
+A tower has to consist of at least one brick.
+The height of a tower is the sum of all heights of bricks that form the tower.
+Two towers are considered to be different if they have different heights.
+(Two towers of the same height are considered the same, even if they differ in the number and colors of bricks that form them.)
+
+You are given the intsredCount,redHeight,blueCountandblueHeight.
+Return the number of different towers that John and Brus can build.
+
+Definition
+
+Class:  TheBrickTowerEasyDivTwo  
+
+Method:  find  
+
+Parameters:  int, int, int, int  
+
+Returns:  int  
+
+Method signature:  int find(int redCount, int redHeight, int blueCount, int blueHeight)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  redCountwill be between 1 and 47, inclusive.  
+
+-  redHeightwill be between 1 and 47, inclusive.  
+
+-  blueCountwill be between 1 and 47, inclusive.  
+
+-  blueHeightwill be between 1 and 47, inclusive.  
+
+Examples
+
+0)  
+
+1
+
+2
+
+3
+
+4
+
+Returns: 4
+
+John and Brus have 1 red brick of height 2 and 3 blue bricks of height 4. Using these bricks, it's possible to build 4 towers:red (height 2);blue (height 4);red, blue (height 6);blue, red, blue (height 10).  
+
+1)  
+
+4
+
+4
+
+4
+
+7
+
+Returns: 12
+
+2)  
+
+7
+
+7
+
+4
+
+4
+
+Returns: 13
+
+3)  
+
+47
+
+47
+
+47
+
+47
+
+Returns: 94
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: Vasyl[alphacom]
+Contest name: SRM 554
