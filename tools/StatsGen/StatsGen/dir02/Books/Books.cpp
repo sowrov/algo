@@ -1,27 +1,26 @@
-#include "functional"
-#include "vector"
-#include "ctime"
-#include "cstdio"
-#include "queue"
-#include "algorithm"
-#include "stack"
-#include "cassert"
 #include "deque"
-#include "map"
+#include "functional"
+#include "stack"
 #include "iomanip"
-#include "utility"
-#include "iostream"
-#include "bitset"
-#include "fstream"
-#include "cctype"
-#include "cstring"
-#include "numeric"
-#include "set"
-#include "list"
-#include "sstream"
-#include "cmath"
 #include "cstdlib"
+#include "bitset"
+#include "iostream"
+#include "cmath"
+#include "map"
+#include "cctype"
+#include "vector"
 #include "string"
+#include "algorithm"
+#include "queue"
+#include "cstring"
+#include "fstream"
+#include "utility"
+#include "cassert"
+#include "list"
+#include "numeric"
+#include "cstdio"
+#include "sstream"
+#include "set"
 
 using namespace std;
 
@@ -33,65 +32,12 @@ using namespace std;
 #define Rep(_var, _N) for (int _var=0; _var<_N; _var++ )
 #define For(_var, _S,  _N) for (int _var=_S; _var<=_N; _var++ )
 
-class BishopMove {
-    int cb[8][8];
-public:    
-    int howManyMoves(int r1, int c1, int r2, int c2) {
-        Zclr(cb);
+class Books {
+public:
+    int sortMoves(vector<string> titles) {
         int out;
-        if (r1==r2 && c1==c2) return 0;
-        int v;
-        v= move(r1, c1, r2, c2,0,-1, 1, 0, 1, -1);
-        if (v!=0) return v;
 
-        v= move(r1, c1, r2, c2,1, 0, 0, 1, 1, 1);
-        if (v!=0) return v;
-
-        v= move(r1, c1, r2, c2,0,-1,-1,0, -1, -1);
-        if (v!=0) return v;
-
-        v= move(r1, c1, r2, c2,-1, 0, 0, 1, -1, 1);
-        if (v!=0) return v;
-        
-        v=move2(r1, c1, 1, 1);
-        if (v!=0) return v;
-        v=move2(r1, c1, -1, 1);
-        if (v!=0) return v;
-        v=move2(r1, c1, -1, -1);
-        if (v!=0) return v;
-        v=move2(r1, c1, 1, -1);
-        if (v!=0) return v;
-
-        return -1;
-    }
-
-    int move(int r1, int c1, int r2, int c2, int r11, int c11, int r22, int c22, int i, int j) {
-
-        int rt[3]; int ct[3];
-        rt[0]=r2; ct[0]=c2;
-        while(rt[0]>-1 && ct[0]>-1 && rt[0]<8 && ct[0]<8) {
-            cb[rt[0]][ct[0]]=1;
-            rt[1]=rt[0]+r11; ct[1]=ct[0]+c11;
-            rt[2]=rt[0]+r22; ct[2]=ct[0]+c22;
-            if (rt[0]==r1 && ct[0]==c1) return 1;
-            if (rt[1]>-1 && ct[1]>-1 && rt[1]<8 && ct[1]<8 && rt[1]==r1 && ct[1]==c1) return -1;
-            if (rt[2]>-1 && ct[2]>-1 && rt[2]<8 && ct[2]<8 && rt[2]==r1 && ct[2]==c1) return -1;
-            rt[0]+=i; ct[0]+=j;
-        }
-
-        return 0;
-    }
-
-    int move2(int r1, int c1, int i, int j) {
-        while(r1>-1 && c1>-1 && r1<8 && c1<8) {
-            if (cb[r1][c1]==1) {
-                return 2;
-            }
-            r1+=i; c1+=j;
-        }
-
-        return 0;
-
+        return out;
     }
 };
 
@@ -175,47 +121,51 @@ namespace otocoder {
     int run_test_case(int casenum) {
         switch (casenum) {
         case 0: {
-            int r1 = 4;
-            int c1 = 6;
-            int r2 = 7;
-            int c2 = 3;
-            int expected_ = 1;
-
-            clock_t start_           = clock();
-            int received_ = BishopMove().howManyMoves(r1, c1, r2, c2);
-            return verify_case(casenum, expected_, received_, clock()-start_);
-        }
-        case 1: {
-            int r1 = 2;
-            int c1 = 5;
-            int r2 = 2;
-            int c2 = 5;
-            int expected_ = 0;
-
-            clock_t start_           = clock();
-            int received_ = BishopMove().howManyMoves(r1, c1, r2, c2);
-            return verify_case(casenum, expected_, received_, clock()-start_);
-        }
-        case 2: {
-            int r1 = 1;
-            int c1 = 3;
-            int r2 = 5;
-            int c2 = 5;
+            string titles[] = {"Algorithms", "Purely Functional Data Structures", "Intro to C", "Automata and Computability"};
             int expected_ = 2;
 
             clock_t start_           = clock();
-            int received_ = BishopMove().howManyMoves(r1, c1, r2, c2);
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
+            return verify_case(casenum, expected_, received_, clock()-start_);
+        }
+        case 1: {
+            string titles[] = {"the fellowship of the ring", "the return of the king", "The two towers"};
+            int expected_ = 1;
+
+            clock_t start_           = clock();
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
+            return verify_case(casenum, expected_, received_, clock()-start_);
+        }
+        case 2: {
+            string titles[] = {"Basic Engineering Circuit Analysis", "A Course in Combinatorics", "Artificial Intelligence", "Asimovs Guide to Shakespeare", "The Nature of Space and Time", "A Time for Trumpets", "Essentials of Artificial Intelligence", "Life by the Numbers", "Cognitive Psychology", "ColdFusion"};
+            int expected_ = 5;
+
+            clock_t start_           = clock();
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
             return verify_case(casenum, expected_, received_, clock()-start_);
         }
         case 3: {
-            int r1 = 4;
-            int c1 = 6;
-            int r2 = 7;
-            int c2 = 4;
-            int expected_ = -1;
+            string titles[] = {"A", "B", "A", "A", "B"};
+            int expected_ = 1;
 
             clock_t start_           = clock();
-            int received_ = BishopMove().howManyMoves(r1, c1, r2, c2);
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
+            return verify_case(casenum, expected_, received_, clock()-start_);
+        }
+        case 4: {
+            string titles[] = {"This Book Has No Title", " This Book Does Have A Title"};
+            int expected_ = 1;
+
+            clock_t start_           = clock();
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
+            return verify_case(casenum, expected_, received_, clock()-start_);
+        }
+        case 5: {
+            string titles[] = {"What Is The", "What Is The ", "What Is The Title Of This Book"};
+            int expected_ = 0;
+
+            clock_t start_           = clock();
+            int received_ = Books().sortMoves(vector<string>(titles, titles + (sizeof titles / sizeof titles[0])));
             return verify_case(casenum, expected_, received_, clock()-start_);
         }
         default:
@@ -223,35 +173,26 @@ namespace otocoder {
         }
     }
 
-    const std::string currentDateTime() {
-        time_t     now = time(0);
-        struct tm  tstruct;
-        char       buf[80];
-        tstruct = *localtime(&now);
-        strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
-        return buf;
-    }
-
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: BishopMove.exe -2 <BishopMove.io
+    //Command line example: Books.exe -2 <Books.io
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
-        int r1;
-        int c1;
-        int r2;
-        int c2;
+        vector<string> titles;
+        string titles_sin;
         int expected_;
 
         std::cin>>testCase; std::cin.ignore(10, '\n');
         for (int i=0; i<testCase; i++) {
             std::cin>>caseNo; std::cin.ignore(10, '\n');
-            std::cin>>r1; std::cin.ignore(10, '\n');
-            std::cin>>c1; std::cin.ignore(10, '\n');
-            std::cin>>r2; std::cin.ignore(10, '\n');
-            std::cin>>c2; std::cin.ignore(10, '\n');
+            titles.clear();
+            std::cin>>N; std::cin.ignore(10, '\n');
+            for(int j=0; j<N; j++) {
+                std::getline(std::cin,titles_sin );
+                titles.push_back(titles_sin);
+            }
             std::cin>>expected_; std::cin.ignore(10, '\n');
             clock_t start_           = clock();
-            int received_ = BishopMove().howManyMoves(r1, c1, r2, c2);
+            int received_ = Books().sortMoves(titles);
             correct += verify_case(caseNo, expected_, received_, clock()-start_);
         }//end of testCase for loop
 
@@ -261,8 +202,8 @@ namespace otocoder {
             cerr << "Some cases FAILED (passed " << correct << " of " << testCase << ")." << endl;
         } else {
             cerr << "All " << testCase << " tests passed!" << endl;
-            std::ofstream ofs("BishopMove.st", std::ios_base::app);
-            ofs<<currentDateTime()<<std::endl;
+            std::ofstream ofs("Books.st", std::ios_base::app);
+            ofs<<time(0)<<std::endl;
             ofs.close();
         }
         return true;

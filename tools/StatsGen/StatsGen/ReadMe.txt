@@ -1,0 +1,1 @@
+Install Dislin from Work drive -> E:\dev\cpp\lib\dl_10_vc\setup.exe
