@@ -1,1 +1,2 @@
-start Otocoder.exe -u samsonedric -p .tfurt. %*
+@echo off
+Otocoder.exe -u samsonedric -p .tfurt. %*
