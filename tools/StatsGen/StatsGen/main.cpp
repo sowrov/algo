@@ -112,7 +112,7 @@ string generateHtml() {
                 boost::posix_time::ptime et(boost::posix_time::time_from_string(pList[i].endTime));
                 boost::posix_time::time_duration duration = et - st;
                 lvlTime[levelInd] += duration.total_seconds();
-                html += "<td>"+boost::posix_time::to_simple_string(duration)+"</td>";
+                html += "<td>"+boost::posix_time::to_simple_string(duration)+".000</td>";
             }
             html +="<td>"+to_iso_extended_string(st)+"</td>";
             html +="</tr>";

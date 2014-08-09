@@ -1,0 +1,73 @@
+Problem Statement
+
+You are given an inty.
+We are looking for any int[]xthat satisfies the following constraints:xhas exactly three elements(x[0] *x[1] ) +x[2] =yEachx[i] must be between -1000 and 1000, inclusive.Nox[i] can be equal to 0 or 1.Find and return one suchx.If there are multiple valid solutions, you may return any of them.
+You may assume that for our constraints ony(specified below) at least one validxalways exists.  
+
+Definition
+
+Class:  AddMultiply  
+
+Method:  makeExpression  
+
+Parameters:  int  
+
+Returns:  int[]  
+
+Method signature:  int[] makeExpression(int y)  
+
+(be sure your method is public)  
+
+Constraints
+
+-  ywill be between 0 and 500, inclusive.  
+
+Examples
+
+0)  
+
+6
+
+Returns: {2, 2, 2 }
+
+2*2 + 2 = 6Note that this is one of many possible solutions. Another solution is:3*3 + (-3) = 6  
+
+1)  
+
+11
+
+Returns: {2, 3, 5 }
+
+2)  
+
+0
+
+Returns: {7, 10, -70 }
+
+Note that 0 and 1 are not allowed, thus a result like 0 * 0 + 0 would be incorrect.  
+
+3)  
+
+500
+
+Returns: {-400, -3, -700 }
+
+Some or all of the returned numbers may be negative.  
+
+4)  
+
+2
+
+Returns: {2, 2, -2 }
+
+5)  
+
+5
+
+Returns: {5, 2, -5 }
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: vexorian
+Contest name: SRM 625
