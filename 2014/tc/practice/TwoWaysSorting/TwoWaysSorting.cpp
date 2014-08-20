@@ -1,0 +1,241 @@
+#include "queue"
+#include "cassert"
+#include "numeric"
+#include "string"
+#include "cctype"
+#include "vector"
+#include "cstring"
+#include "stack"
+#include "algorithm"
+#include "iomanip"
+#include "iostream"
+#include "sstream"
+#include "cmath"
+#include "utility"
+#include "map"
+#include "cstdlib"
+#include "cstdio"
+#include "deque"
+#include "ctime"
+#include "set"
+#include "fstream"
+#include "functional"
+#include "bitset"
+#include "list"
+
+using namespace std;
+
+#define Zclr(arr) memset(arr, 0, sizeof(arr))
+#define Nclr(arr) memset(arr, -1, sizeof(arr))
+#define M31 1<<30
+#define Pi (2.0*acos(0.0))
+#define Eps (1e-9)
+#define Rep(_var, _N) for (int _var=0; _var<_N; _var++ )
+#define For(_var, _S,  _N) for (int _var=_S; _var<=_N; _var++ )
+
+class TwoWaysSorting {
+public:
+    string sortingMethod(vector<string> stringList) {
+        bool lex=true, len=true;
+        for (int i=1; i<stringList.size(); i++) {
+            lex &= stringList[i-1]<stringList[i];
+            len &= stringList[i-1].size() < stringList[i].size();
+        }
+        return (lex && len)?"both":lex?"lexicographically":len?"lengths":"none";
+    }
+};
+
+// <editor-fold defaultstate="collapsed" desc="Generated Code">
+namespace otocoder {
+    int run_test_case(int );
+    bool run_full_test();
+    // _currentCaseNo<-1 to run full test set, _currentCaseNo=-1 (default) to run all sample test cases,
+    // _currentCaseNo>-1 value to run specific sample case
+    void run_test(int _currentCaseNo = -1, bool quiet = false) {
+        if (_currentCaseNo < -1) {
+            if (!run_full_test()) {
+                cerr << "Illegal inputs in full test cases!" << endl;
+            }
+            return;
+        }
+        if (_currentCaseNo > -1) {
+            if (run_test_case(_currentCaseNo) == -1 && !quiet) {
+                cerr << "Illegal input! Test case " << _currentCaseNo << " does not exist." << endl;
+            }
+            return;
+        }
+
+        int _correctResCount = 0, total = 0;
+        for (int i=0;; ++i) {
+            int x = run_test_case(i);
+            if (x == -1) {
+                if (i >= 100) break;
+                continue;
+            }
+            _correctResCount += x;
+            ++total;
+        }
+
+        if (total == 0) {
+            cerr << "No test cases run." << endl;
+        } else if (_correctResCount < total) {
+            cerr << "Some cases FAILED (passed " << _correctResCount << " of " << total << ")." << endl;
+        } else {
+            cerr << "All " << total << " tests passed!" << endl;
+        }
+    }
+
+    int verify_case(int _currentCaseNo, const string &expected, const string &received, clock_t elapsed) { 
+        cerr << "Example " << _currentCaseNo << "... "; 
+
+        string verdict;
+        vector<string> info;
+        char buf[100];
+
+        if (elapsed > CLOCKS_PER_SEC / 200) {
+            sprintf(buf, "time %.2fs", elapsed * (1.0/CLOCKS_PER_SEC));
+            info.push_back(buf);
+        }
+
+        if (expected == received) {
+            verdict = "PASSED";
+        } else {
+            verdict = "FAILED";
+        }
+
+        cerr << verdict;
+        if (!info.empty()) {
+            cerr << " (";
+            for (int i=0; i<(int)info.size(); ++i) {
+                if (i > 0) cerr << ", ";
+                cerr << info[i];
+            }
+            cerr << ")";
+        }
+        cerr << endl;
+
+        if (verdict == "FAILED") {
+            cerr << "    Expected: \"" << expected << "\"" << endl;
+            cerr << "    Received: \"" << received << "\"" << endl;
+        }
+
+        return verdict == "PASSED";
+    }
+
+    int run_test_case(int _currentCaseNo) {
+        switch (_currentCaseNo) {
+        case 0: {
+            string stringList[] = {"a", "aa", "bbb"};
+            string expected_ = "both";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        case 1: {
+            string stringList[] = {"c", "bb", "aaa"};
+            string expected_ = "lengths";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        case 2: {
+            string stringList[] = {"etdfgfh", "aio"};
+            string expected_ = "none";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        case 3: {
+            string stringList[] = {"aaa", "z"};
+            string expected_ = "lexicographically";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        case 4: {
+            string stringList[] = {"z"};
+            string expected_ = "both";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        case 5: {
+            string stringList[] = {"abcdef", "bcdef", "cdef", "def", "ef", "f", "topcoder"};
+            string expected_ = "lexicographically";
+
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(vector<string>(stringList, stringList + (sizeof stringList / sizeof stringList[0])));
+            return verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }
+        default:
+            return -1;
+        }
+    }
+
+    const std::string currentDateTime() {
+        time_t     now = time(0);
+        struct tm  tstruct;
+        char       buf[80];
+        tstruct = *localtime(&now);
+        strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+        return buf;
+    }
+
+    //This method will only accept input files that are formatted in proper way.
+    //Command line example: TwoWaysSorting.exe -2 <TwoWaysSorting.io
+    bool run_full_test() {
+        int _totalTestCases, _totalArrayItems, _currentCaseNo, _correctResCount=0;
+        vector<string> stringList;
+        string stringList_sin;
+        string expected_;
+
+        std::cin>>_totalTestCases; std::cin.ignore(10, '\n');
+        for (int i=0; i<_totalTestCases; i++) {
+            std::cin>>_currentCaseNo; std::cin.ignore(10, '\n');
+            stringList.clear();
+            std::cin>>_totalArrayItems; std::cin.ignore(10, '\n');
+            for(int j=0; j<_totalArrayItems; j++) {
+                std::getline(std::cin,stringList_sin );
+                if (!stringList_sin.empty() && *stringList_sin.rbegin() == '\r') {
+                    stringList_sin.erase(stringList_sin.length() - 1, 1);
+                }
+                stringList.push_back(stringList_sin);
+            }
+            std::getline(std::cin,expected_);
+            if (!expected_.empty() && *expected_.rbegin() == '\r') {
+                expected_.erase(expected_.length() - 1, 1);
+            }
+            clock_t start_           = clock();
+            string received_ = TwoWaysSorting().sortingMethod(stringList);
+            _correctResCount += verify_case(_currentCaseNo, expected_, received_, clock()-start_);
+        }//end of _totalTestCases for loop
+
+        if (_totalTestCases == 0) {
+            cerr << "No test cases run." << endl;
+        } else if (_correctResCount < _totalTestCases) {
+            cerr << "Some cases FAILED (passed " << _correctResCount << " of " << _totalTestCases << ")." << endl;
+        } else {
+            cerr << "All " << _totalTestCases << " tests passed!" << endl;
+            std::ofstream ofs("TwoWaysSorting.st", std::ios_base::app);
+            ofs<<currentDateTime()<<std::endl;
+            ofs.close();
+        }
+        return true;
+    }
+
+}
+
+int main(int argc, char *argv[]) {
+    if (argc == 1) {
+        otocoder::run_test();
+    } else {
+        for (int i=1; i<argc; ++i)
+            otocoder::run_test(atoi(argv[i]));
+    }
+}
+// </editor-fold>

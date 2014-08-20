@@ -1,0 +1,87 @@
+Problem Statement
+
+Sasha has a String[]stringList. No two elements ofstringListhave the same length.
+
+So far, Sasha has learned two ways of sorting strings:
+
+He can sort stringslexicographically. For example, "car" < "carriage" < "cats" < "doggies". (See Notes for a definition of the lexicographic order.)He can also sort strings according to theirlengthsin ascending order. For example, "car" < "cats" < "doggies" < "carriage".Sasha now wonders whetherstringListis sorted in either of these two ways. Return "lexicographically" (quotes for clarity) ifstringListis sorted lexicographically but not according to the string lengths. Return "lengths" ifstringListis sorted according to the string lengths but not lexicographically. Return "both" if it is sorted in both ways. Otherwise, return "none".
+
+Definition
+
+Class:  TwoWaysSorting  
+
+Method:  sortingMethod  
+
+Parameters:  String[]  
+
+Returns:  String  
+
+Method signature:  String sortingMethod(String[] stringList)  
+
+(be sure your method is public)  
+
+Notes
+
+-  String A is lexicographically smaller than string B if A contains a character with a smaller ASCII value in the first position where they differ. In case one of the strings ends before they have a different character, the shorter one is considered smaller.  
+
+Constraints
+
+-  stringListwill contain between 1 and 50 elements, inclusive.  
+
+-  Each element ofstringListwill contain between 1 and 50 characters, inclusive.  
+
+-  Each character of each element ofstringListwill be a lowercase English letter ('a'-'z').  
+
+-  Every two elements ofstringListwill have different lengths.  
+
+Examples
+
+0)  
+
+{"a", "aa", "bbb"}
+
+Returns: "both"
+
+These strings are sorted both lexicographically and according to their lengths.  
+
+1)  
+
+{"c", "bb", "aaa"}
+
+Returns: "lengths"
+
+The lengths of these strings are in ascending order. However, they are not sorted lexicographically as, for instance, "aaa" is lexicographically smaller than "c".  
+
+2)  
+
+{"etdfgfh", "aio"}
+
+Returns: "none"
+
+Here the first string is longer than the second one, so they are not sorted according to length. (Note that we require the lengths to be in ascending order.) Similarly, they are not sorted lexicographically: "aio" should come before "etdfgfh".  
+
+3)  
+
+{"aaa", "z"}
+
+Returns: "lexicographically"
+
+The input strings are sorted lexicographically only.  
+
+4)  
+
+{"z"}
+
+Returns: "both"
+
+5)  
+
+{"abcdef", "bcdef", "cdef", "def", "ef", "f", "topcoder"}
+
+Returns: "lexicographically"
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2010, TopCoder, Inc.  All rights reserved.
+
+
+Problem Authod: boba5551
+Contest name: SRM 621
