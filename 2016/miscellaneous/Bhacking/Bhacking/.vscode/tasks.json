@@ -1,3 +1,10 @@
+/*
+In File->Preferences->Keyboard Shortcuts, add the followings:
+[
+     { "key": "f8",          "command": "workbench.action.tasks.build" },
+     { "key": "f9",          "command": "workbench.action.tasks.test" }
+]
+*/
 {
     "version": "0.1.0",
     "command": "bash",
@@ -16,19 +23,16 @@
             "showOutput": "always",
             // No args
             "args": ["g++ -time ${file}"]
-            // Use the standard less compilation problem matcher.
-            // "problemMatcher": {
-            //     "owner": "cpp",
-            //     "fileLocation": ["relative", "${workspaceRoot}"],
-            //     "pattern": {
-            //         "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-            //         "file": 1,
-            //         "line": 2,
-            //         "column": 3,
-            //         "severity": 4,
-            //         "message": 5
-            //     }
-            // }
+        },
+        {
+            "taskName": "Run",
+            "suppressTaskName": true,
+            // Make this the default build command.
+            "isTestCommand": true,
+            // Show the output window only if unrecognized errors occur.
+            "showOutput": "always",
+            // No args
+            "args": [".\/a.out"]
         }
     ]
 }
