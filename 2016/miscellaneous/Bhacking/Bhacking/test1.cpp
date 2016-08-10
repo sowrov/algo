@@ -32,6 +32,6 @@ using namespace std;
 #define Eps (1e-9)
 
 int main() {
-	printf("bla");
+	printf("bla bla\n");
 	return 0;
 }
