@@ -1,7 +1,7 @@
 /*
 In File->Preferences->Keyboard Shortcuts, add the followings:
 [
-     { "key": "f8",          "command": "workbench.action.tasks.build" },
+     { "key": "f10",          "command": "workbench.action.tasks.build" },
      { "key": "f9",          "command": "workbench.action.tasks.test" }
 ]
 */
