@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Countergame.cpp">
+    <ClCompile Include="array-splitting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

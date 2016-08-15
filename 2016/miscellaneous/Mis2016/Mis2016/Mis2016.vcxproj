@@ -19,7 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Countergame.cpp" />
+    <ClCompile Include="array-splitting.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ABC9A6E2-20B6-4629-A84C-8B2051C10136}</ProjectGuid>
