@@ -1,0 +1,38 @@
+/*
+In File->Preferences->Keyboard Shortcuts, add the followings:
+[
+     { "key": "f10",          "command": "workbench.action.tasks.build" },
+     { "key": "f9",          "command": "workbench.action.tasks.test" }
+]
+*/
+{
+    "version": "0.1.0",
+    "command": "bash",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "args": [
+        "-c"
+    ],
+    "tasks": [
+        {
+            "taskName": "Compile",
+            "suppressTaskName": true,
+            // Make this the default build command.
+            "isBuildCommand": true,
+            // Show the output window only if unrecognized errors occur.
+            "showOutput": "always",
+            // No args
+            "args": ["g++ -time ${file}"]
+        },
+        {
+            "taskName": "Run",
+            "suppressTaskName": true,
+            // Make this the default build command.
+            "isTestCommand": true,
+            // Show the output window only if unrecognized errors occur.
+            "showOutput": "always",
+            // No args
+            "args": [".\/a.out"]
+        }
+    ]
+}
