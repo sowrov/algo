@@ -34,7 +34,7 @@ using namespace std;
 int h[100001];
 int main() {
     int t, n;
-    long long p, sum;
+    long long p, sum, s;
 
     cin>>t;
     while(t--) {
@@ -43,11 +43,14 @@ int main() {
             cin>>h[i];
         }
         sort(h, h+n);
-        sum = 1;
+        sum = 0;
         p=0;
-        for (int i=0; i<n; i++) {
-
+        for (int i=n-1; i>0; i--) {
+			sum += h[i];
+			s = i + 1;
+			p = max(p, s*sum); //s*(hx+hy+hz...), i number of mandra.. were eaten
         }
+		cout << p << endl;
     }
     return 0;
 }
