@@ -30,34 +30,23 @@ using namespace std;
 #define P31 1<<30
 #define Pi (2.0*acos(0.0))
 #define Eps (1e-9)
-#define BN 51
 
-int coins[BN];
-long long memo[252][BN];
-
-long long dp(int t, int p, int m) {
-    if (t<0 || p>=m) {
-        return 0;
-    }
-    if (t==0) {
-        return 1;
-    }
-    if (memo[t][p]!=-1) return memo[t][p];
-
-	long long mx = dp(t - coins[p], p, m);
-		mx += dp(t, p+1, m);
-
-	memo[t][p] =mx;
-    return mx;
-}
-int main () {
-    int n, m;
-    cin>>n>>m;
-    clrm(memo);
-    for (int i=0; i<m; i++) {
-        cin>>coins[i];
-    }
-
-    cout<<dp(n, 0, m)<<endl;
-    return 0;
+int main() {
+	int n;
+	cin >> n;
+	vector<int> a(n);
+	for (int a_i = 0; a_i < n; a_i++) {
+		cin >> a[a_i];
+	}
+	sort(a.begin(), a.end());
+	int sum = 0;
+	for (int i = 0; i < n - 1; i++) {
+		sum += a[i];
+	}
+	if (sum <= a[n - 1]) {
+		cout << "1\n";
+	} else {
+		cout << "0\n";
+	}
+	return 0;
 }
