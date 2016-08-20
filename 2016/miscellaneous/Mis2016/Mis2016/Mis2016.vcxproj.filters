@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="array-splitting.cpp">
+    <ClCompile Include="red-john-is-back.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

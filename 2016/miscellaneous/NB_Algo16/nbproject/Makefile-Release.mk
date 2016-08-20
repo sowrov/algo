@@ -35,7 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/HR_ReverseShuffleMerge.o
+	${OBJECTDIR}/HR_ShortestReach.o
 
 
 # C Compiler Flags
@@ -62,10 +62,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/nb_algo16.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/nb_algo16 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/HR_ReverseShuffleMerge.o: HR_ReverseShuffleMerge.cpp 
+${OBJECTDIR}/HR_ShortestReach.o: HR_ShortestReach.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/HR_ReverseShuffleMerge.o HR_ReverseShuffleMerge.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/HR_ShortestReach.o HR_ShortestReach.cpp
 
 # Subprojects
 .build-subprojects:

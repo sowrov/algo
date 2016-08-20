@@ -18,12 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MatchingSets.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2056D990-B6C3-4531-BFD0-0C6498F988C4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
