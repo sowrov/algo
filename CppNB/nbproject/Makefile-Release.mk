@@ -21,8 +21,8 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
-CND_DLIB_EXT=so
+CND_PLATFORM=Cygwin-Windows
+CND_DLIB_EXT=dll
 CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -34,8 +34,7 @@ include Makefile
 OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
-OBJECTFILES= \
-	${OBJECTDIR}/111-History-Grading.o
+OBJECTFILES=
 
 
 # C Compiler Flags
@@ -56,16 +55,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/111-History-Grading.o: 111-History-Grading.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/111-History-Grading.o 111-History-Grading.cpp
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 # Subprojects
 .build-subprojects:
@@ -73,7 +67,7 @@ ${OBJECTDIR}/111-History-Grading.o: 111-History-Grading.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cppnb.exe
 
 # Subprojects
 .clean-subprojects:
