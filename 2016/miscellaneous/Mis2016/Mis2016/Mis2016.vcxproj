@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main\DoubleWeights.cpp" />
+    <ClCompile Include="game-of-stones-1.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B3A1D73-E12E-4F33-8D32-F31E11D04470}</ProjectGuid>
+    <ProjectGuid>{ABC9A6E2-20B6-4629-A84C-8B2051C10136}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>srm</RootNamespace>
+    <RootNamespace>Mis2016</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
