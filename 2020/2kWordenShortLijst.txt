@@ -1,11 +1,3 @@
 Aanpassen 	To adjust
 Anderzijds  	on the other hand
-beleid (het)  	policy
-benzine 	gasoline
-bereid	prepared
-bestuur (het)	Directors (the)
-betrekken	involve
-broek	pants
-brug	bridge
-caravan	caravan
-delen	share
+crisis		crisis
