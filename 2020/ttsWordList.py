@@ -8,6 +8,7 @@ import os
 import time
 
 wordFile = open("2kWordenlijst.txt")
+#wordFile = open("2kWordenShortLijst.txt")
 
 enLang = 'en'
 nlLang = 'nl'
@@ -17,26 +18,31 @@ while True:
 
     if not line: break
 
-    wordAndMean = line.split('\t')
-    word = wordAndMean[0].split('(')[0]
+    wordAndMean = list(filter(None, line.split('\t')))
+    word = wordAndMean[0].split('(')[0].strip()
     wordChar = ""
     for char in word:
-        wordChar += char + " "
+        if wordChar != "":
+            wordChar += ", "
+        wordChar += char
     
-    meaning = wordAndMean[1]
+    meaning = wordAndMean[1].split('(')[0].strip()
+    
+    if not word or not wordChar or not meaning:
+        print("----Error----\n"+line)
+        continue
     print (word + " - - "+wordChar+" -- "+meaning)
 
     nlWord = gTTS(text=word, lang=nlLang, slow=False) 
     nlWord.save("nlWord.mp3")
-    nlWordChar = gTTS(text=wordChar, lang=nlLang, slow=True)
+    nlWordChar = gTTS(text=wordChar, lang=nlLang, slow=False)
     nlWordChar.save("nlWordChar.mp3")
     enMeaning = gTTS(text=meaning, lang=enLang, slow=False) 
     enMeaning.save("enMeaning.mp3")
     
 
     # Playing the converted file 
-    os.system("mpg123 ./nlWord.mp3") 
-    os.system("mpg123 ./nlWordChar.mp3")
-    os.system("mpg123 ./nlWord.mp3")
-    os.system("mpg123 ./enMeaning.mp3") 
-    time.sleep(1)
+    os.system("mpg123 -q ./nlWord.mp3") 
+    os.system("mpg123 -q ./nlWordChar.mp3")
+    os.system("mpg123 -q ./nlWord.mp3")
+    os.system("mpg123 -q ./enMeaning.mp3")
