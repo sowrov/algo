@@ -56,6 +56,7 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.mp3
 
 # Chutzpah Test files
 _Chutzpah*
@@ -206,3 +207,4 @@ FakesAssemblies/
 !Otocoder.exe
 !StatsGen.exe
 
+/2020/java/target/
