@@ -208,3 +208,5 @@ FakesAssemblies/
 !StatsGen.exe
 
 /2020/java/target/
+.DS_Store
+nbproject/*
