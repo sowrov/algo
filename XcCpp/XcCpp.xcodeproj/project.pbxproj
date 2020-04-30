@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C9AF1548240DA8C900B1E44C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF1547240DA8C900B1E44C /* main.cpp */; };
+		C97D7358245763EC00BE821C /* HR-BotSavePrin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97D7357245763EC00BE821C /* HR-BotSavePrin.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C97D7357245763EC00BE821C /* HR-BotSavePrin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "HR-BotSavePrin.cpp"; sourceTree = "<group>"; };
 		C9AF1544240DA8C900B1E44C /* XcCpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = XcCpp; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9AF1547240DA8C900B1E44C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 		C9AF1546240DA8C900B1E44C /* XcCpp */ = {
 			isa = PBXGroup;
 			children = (
-				C9AF1547240DA8C900B1E44C /* main.cpp */,
+				C97D7357245763EC00BE821C /* HR-BotSavePrin.cpp */,
 			);
 			path = XcCpp;
 			sourceTree = "<group>";
@@ -119,7 +119,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9AF1548240DA8C900B1E44C /* main.cpp in Sources */,
+				C97D7358245763EC00BE821C /* HR-BotSavePrin.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
