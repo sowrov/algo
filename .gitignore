@@ -206,7 +206,10 @@ FakesAssemblies/
 *.app
 !Otocoder.exe
 !StatsGen.exe
+*otocoder
 
+*login_cookie.txt
 /2020/java/target/
 .DS_Store
 /CppNB/dist/
+
