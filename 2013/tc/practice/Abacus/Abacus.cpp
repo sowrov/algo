@@ -194,7 +194,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: Abacus.exe -2 <Abacus.io
+    //Command line example: Abacus.exe -2 <AbacusIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> original;
