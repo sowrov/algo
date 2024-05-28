@@ -180,7 +180,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TypingDistance.exe -2 <TypingDistance.io
+    //Command line example: TypingDistance.exe -2 <TypingDistanceIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string keyboard;

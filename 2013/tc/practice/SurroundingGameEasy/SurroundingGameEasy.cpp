@@ -203,7 +203,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: SurroundingGameEasy.exe -2 <SurroundingGameEasy.io
+    //Command line example: SurroundingGameEasy.exe -2 <SurroundingGameEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> cost;

@@ -177,7 +177,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TriangleType.exe -2 <TriangleType.io
+    //Command line example: TriangleType.exe -2 <TriangleTypeIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int a;

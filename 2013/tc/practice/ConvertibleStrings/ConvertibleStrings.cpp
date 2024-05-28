@@ -205,7 +205,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ConvertibleStrings.exe -2 <ConvertibleStrings.io
+    //Command line example: ConvertibleStrings.exe -2 <ConvertibleStringsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string A;

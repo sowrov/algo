@@ -238,7 +238,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ArcadeManao.exe -2 <ArcadeManao.io
+    //Command line example: ArcadeManao.exe -2 <ArcadeManaoIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> level;

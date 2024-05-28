@@ -209,7 +209,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FauxPalindromes.exe -2 <FauxPalindromes.io
+    //Command line example: FauxPalindromes.exe -2 <FauxPalindromesIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string word;

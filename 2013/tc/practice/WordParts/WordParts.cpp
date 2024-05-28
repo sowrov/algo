@@ -214,7 +214,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: WordParts.exe -2 <WordParts.io
+    //Command line example: WordParts.exe -2 <WordPartsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string original;

@@ -180,7 +180,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: PenguinTiles.exe -2 <PenguinTiles.io
+    //Command line example: PenguinTiles.exe -2 <PenguinTilesIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> tiles;

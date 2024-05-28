@@ -266,7 +266,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: AstronomicalRecordsEasy.exe -2 <AstronomicalRecordsEasy.io
+    //Command line example: AstronomicalRecordsEasy.exe -2 <AstronomicalRecordsEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> A;

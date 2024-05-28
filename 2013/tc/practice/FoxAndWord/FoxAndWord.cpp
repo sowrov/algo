@@ -200,7 +200,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FoxAndWord.exe -2 <FoxAndWord.io
+    //Command line example: FoxAndWord.exe -2 <FoxAndWordIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> words;

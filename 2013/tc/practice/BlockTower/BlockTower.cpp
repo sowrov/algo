@@ -216,7 +216,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: BlockTower.exe -2 <BlockTower.io
+    //Command line example: BlockTower.exe -2 <BlockTowerIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> blockHeights;

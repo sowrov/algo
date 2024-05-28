@@ -246,7 +246,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: IDNumberVerification.exe -2 <IDNumberVerification.io
+    //Command line example: IDNumberVerification.exe -2 <IDNumberVerificationIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string id;

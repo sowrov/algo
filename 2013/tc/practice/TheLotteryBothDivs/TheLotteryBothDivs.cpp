@@ -224,7 +224,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheLotteryBothDivs.exe -2 <TheLotteryBothDivs.io
+    //Command line example: TheLotteryBothDivs.exe -2 <TheLotteryBothDivsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> goodSuffixes;

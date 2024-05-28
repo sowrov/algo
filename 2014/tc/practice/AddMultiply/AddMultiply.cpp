@@ -200,7 +200,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: AddMultiply.exe -2 <AddMultiply.io
+    //Command line example: AddMultiply.exe -2 <AddMultiplyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int y;

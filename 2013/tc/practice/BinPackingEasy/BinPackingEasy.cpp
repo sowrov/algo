@@ -200,7 +200,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: BinPackingEasy.exe -2 <BinPackingEasy.io
+    //Command line example: BinPackingEasy.exe -2 <BinPackingEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> item;

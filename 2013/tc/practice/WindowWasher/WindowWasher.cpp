@@ -207,7 +207,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: WindowWasher.exe -2 <WindowWasher.io
+    //Command line example: WindowWasher.exe -2 <WindowWasherIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int width;

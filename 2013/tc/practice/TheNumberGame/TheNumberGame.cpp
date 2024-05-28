@@ -172,7 +172,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheNumberGame.exe -2 <TheNumberGame.io
+    //Command line example: TheNumberGame.exe -2 <TheNumberGameIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int A;

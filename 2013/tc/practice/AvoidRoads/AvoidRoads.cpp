@@ -199,7 +199,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: AvoidRoads.exe -2 <AvoidRoads.io
+    //Command line example: AvoidRoads.exe -2 <AvoidRoadsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int width;

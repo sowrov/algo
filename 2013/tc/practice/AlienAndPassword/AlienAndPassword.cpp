@@ -191,7 +191,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: AlienAndPassword.exe -2 <AlienAndPassword.io
+    //Command line example: AlienAndPassword.exe -2 <AlienAndPasswordIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string S;

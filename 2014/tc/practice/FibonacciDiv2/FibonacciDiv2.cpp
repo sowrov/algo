@@ -187,7 +187,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FibonacciDiv2.exe -2 <FibonacciDiv2.io
+    //Command line example: FibonacciDiv2.exe -2 <FibonacciDiv2IO.txt
     bool run_full_test() {
         int _totalTestCases, _totalArrayItems, _currentCaseNo, _correctResCount=0;
         int N;

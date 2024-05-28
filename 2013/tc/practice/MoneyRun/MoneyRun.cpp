@@ -304,7 +304,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: MoneyRun.exe -2 <MoneyRun.io
+    //Command line example: MoneyRun.exe -2 <MoneyRunIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> grid;

@@ -218,7 +218,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheSquareRootDilemma.exe -2 <TheSquareRootDilemma.io
+    //Command line example: TheSquareRootDilemma.exe -2 <TheSquareRootDilemmaIO.txt
     bool run_full_test() {
         int testCase, caseNo, correct=0;
         int N;

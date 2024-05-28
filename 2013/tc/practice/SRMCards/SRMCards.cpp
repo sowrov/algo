@@ -214,7 +214,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: SRMCards.exe -2 <SRMCards.io
+    //Command line example: SRMCards.exe -2 <SRMCardsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> cards;

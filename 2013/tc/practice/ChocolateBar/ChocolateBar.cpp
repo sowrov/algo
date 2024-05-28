@@ -181,7 +181,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ChocolateBar.exe -2 <ChocolateBar.io
+    //Command line example: ChocolateBar.exe -2 <ChocolateBarIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string letters;

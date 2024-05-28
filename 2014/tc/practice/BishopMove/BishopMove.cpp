@@ -233,7 +233,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: BishopMove.exe -2 <BishopMove.io
+    //Command line example: BishopMove.exe -2 <BishopMoveIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int r1;

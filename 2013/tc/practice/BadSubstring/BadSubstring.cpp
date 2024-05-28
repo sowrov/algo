@@ -158,7 +158,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: BadSubstring.exe -2 <BadSubstring.io
+    //Command line example: BadSubstring.exe -2 <BadSubstringIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int length;

@@ -179,7 +179,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FoxAndMp3Easy.exe -2 <FoxAndMp3Easy.io
+    //Command line example: FoxAndMp3Easy.exe -2 <FoxAndMp3EasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int n;

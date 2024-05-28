@@ -177,7 +177,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: CityMap.exe -2 <CityMap.io
+    //Command line example: CityMap.exe -2 <CityMapIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> cityMap;

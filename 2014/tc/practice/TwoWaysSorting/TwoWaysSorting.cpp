@@ -187,7 +187,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TwoWaysSorting.exe -2 <TwoWaysSorting.io
+    //Command line example: TwoWaysSorting.exe -2 <TwoWaysSortingIO.txt
     bool run_full_test() {
         int _totalTestCases, _totalArrayItems, _currentCaseNo, _correctResCount=0;
         vector<string> stringList;

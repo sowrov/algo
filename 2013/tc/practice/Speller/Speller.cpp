@@ -209,7 +209,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: Speller.exe -2 <Speller.io
+    //Command line example: Speller.exe -2 <SpellerIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string number;

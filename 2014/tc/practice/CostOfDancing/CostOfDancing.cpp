@@ -175,7 +175,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: CostOfDancing.exe -2 <CostOfDancing.io
+    //Command line example: CostOfDancing.exe -2 <CostOfDancingIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int K;

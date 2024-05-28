@@ -252,7 +252,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ElectronicScarecrows.exe -2 <ElectronicScarecrows.io
+    //Command line example: ElectronicScarecrows.exe -2 <ElectronicScarecrowsIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector <int> x;

@@ -197,7 +197,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: XorBoardDivTwo.exe -2 <XorBoardDivTwo.io
+    //Command line example: XorBoardDivTwo.exe -2 <XorBoardDivTwoIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> board;

@@ -192,7 +192,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ManySquares.exe -2 <ManySquares.io
+    //Command line example: ManySquares.exe -2 <ManySquaresIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> sticks;

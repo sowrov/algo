@@ -186,7 +186,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: GreatFairyWar.exe -2 <GreatFairyWar.io
+    //Command line example: GreatFairyWar.exe -2 <GreatFairyWarIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> dps;

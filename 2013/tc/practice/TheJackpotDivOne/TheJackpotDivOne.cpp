@@ -241,7 +241,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheJackpotDivOne.exe -2 <TheJackpotDivOne.io
+    //Command line example: TheJackpotDivOne.exe -2 <TheJackpotDivOneIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<long long> money;

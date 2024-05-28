@@ -234,7 +234,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: SimilarNames2.exe -2 <SimilarNames2.io
+    //Command line example: SimilarNames2.exe -2 <SimilarNames2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> names;

@@ -188,7 +188,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheDeviceDiv2.exe -2 <TheDeviceDiv2.io
+    //Command line example: TheDeviceDiv2.exe -2 <TheDeviceDiv2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> plates;

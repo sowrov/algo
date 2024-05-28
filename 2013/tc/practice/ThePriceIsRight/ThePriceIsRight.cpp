@@ -219,7 +219,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ThePriceIsRight.exe -2 <ThePriceIsRight.io
+    //Command line example: ThePriceIsRight.exe -2 <ThePriceIsRightIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector <int> prices;

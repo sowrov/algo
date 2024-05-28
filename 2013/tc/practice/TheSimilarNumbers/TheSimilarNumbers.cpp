@@ -175,7 +175,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheSimilarNumbers.exe -2 <TheSimilarNumbers.io
+    //Command line example: TheSimilarNumbers.exe -2 <TheSimilarNumbersIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int lower;

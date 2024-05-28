@@ -181,7 +181,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: EasyHomework.exe -2 <EasyHomework.io
+    //Command line example: EasyHomework.exe -2 <EasyHomeworkIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> A;

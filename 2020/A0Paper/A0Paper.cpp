@@ -174,7 +174,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: A0Paper.exe -2 <A0Paper.io
+    //Command line example: A0Paper.exe -2 <A0PaperIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> A;

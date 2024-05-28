@@ -188,7 +188,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: PlatypusDuckAndBeaver.exe -2 <PlatypusDuckAndBeaver.io
+    //Command line example: PlatypusDuckAndBeaver.exe -2 <PlatypusDuckAndBeaverIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int webbedFeet;

@@ -186,7 +186,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheJediTestDiv2.exe -2 <TheJediTestDiv2.io
+    //Command line example: TheJediTestDiv2.exe -2 <TheJediTestDiv2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> students;

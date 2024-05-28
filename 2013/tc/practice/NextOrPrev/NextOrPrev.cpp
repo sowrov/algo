@@ -215,7 +215,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: NextOrPrev.exe -2 <NextOrPrev.io
+    //Command line example: NextOrPrev.exe -2 <NextOrPrevIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int nextCost;

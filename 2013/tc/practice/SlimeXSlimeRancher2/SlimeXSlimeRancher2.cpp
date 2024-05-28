@@ -164,7 +164,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: SlimeXSlimeRancher2.exe -2 <SlimeXSlimeRancher2.io
+    //Command line example: SlimeXSlimeRancher2.exe -2 <SlimeXSlimeRancher2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> attributes;

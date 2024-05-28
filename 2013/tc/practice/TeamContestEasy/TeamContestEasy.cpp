@@ -221,7 +221,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TeamContestEasy.exe -2 <TeamContestEasy.io
+    //Command line example: TeamContestEasy.exe -2 <TeamContestEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> strength;

@@ -192,7 +192,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: EllysNewNickname.exe -2 <EllysNewNickname.io
+    //Command line example: EllysNewNickname.exe -2 <EllysNewNicknameIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string nickname;

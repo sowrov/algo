@@ -249,7 +249,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: CatchTheBeatEasy.exe -2 <CatchTheBeatEasy.io
+    //Command line example: CatchTheBeatEasy.exe -2 <CatchTheBeatEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> x;

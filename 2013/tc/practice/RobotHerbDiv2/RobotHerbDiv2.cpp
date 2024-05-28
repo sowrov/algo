@@ -173,7 +173,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: RobotHerbDiv2.exe -2 <RobotHerbDiv2.io
+    //Command line example: RobotHerbDiv2.exe -2 <RobotHerbDiv2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int T;

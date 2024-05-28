@@ -165,7 +165,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FracCount.exe -2 <FracCount.io
+    //Command line example: FracCount.exe -2 <FracCountIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int numerator;

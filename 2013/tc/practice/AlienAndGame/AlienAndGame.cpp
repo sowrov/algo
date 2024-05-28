@@ -206,7 +206,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: AlienAndGame.exe -2 <AlienAndGame.io
+    //Command line example: AlienAndGame.exe -2 <AlienAndGameIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<string> board;

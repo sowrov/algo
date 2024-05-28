@@ -182,7 +182,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: CucumberMarket.exe -2 <CucumberMarket.io
+    //Command line example: CucumberMarket.exe -2 <CucumberMarketIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> price;

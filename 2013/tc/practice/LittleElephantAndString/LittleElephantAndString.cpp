@@ -224,7 +224,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: LittleElephantAndString.exe -2 <LittleElephantAndString.io
+    //Command line example: LittleElephantAndString.exe -2 <LittleElephantAndStringIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string A;

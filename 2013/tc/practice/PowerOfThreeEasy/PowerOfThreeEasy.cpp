@@ -221,7 +221,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: PowerOfThreeEasy.exe -2 <PowerOfThreeEasy.io
+    //Command line example: PowerOfThreeEasy.exe -2 <PowerOfThreeEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int x;

@@ -212,7 +212,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: ColorfulRoad.exe -2 <ColorfulRoad.io
+    //Command line example: ColorfulRoad.exe -2 <ColorfulRoadIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string road;

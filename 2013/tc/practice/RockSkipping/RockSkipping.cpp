@@ -218,7 +218,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: RockSkipping.exe -2 <RockSkipping.io
+    //Command line example: RockSkipping.exe -2 <RockSkippingIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string pads;

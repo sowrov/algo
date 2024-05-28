@@ -180,7 +180,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: FoxAndFencingEasy.exe -2 <FoxAndFencingEasy.io
+    //Command line example: FoxAndFencingEasy.exe -2 <FoxAndFencingEasyIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int mov1;

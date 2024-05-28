@@ -201,7 +201,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TheNumberGameDiv2.exe -2 <TheNumberGameDiv2.io
+    //Command line example: TheNumberGameDiv2.exe -2 <TheNumberGameDiv2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         int A;

@@ -198,7 +198,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: MiddleCode.exe -2 <MiddleCode.io
+    //Command line example: MiddleCode.exe -2 <MiddleCodeIO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         string s;

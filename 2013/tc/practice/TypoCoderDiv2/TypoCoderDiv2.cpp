@@ -184,7 +184,7 @@ namespace otocoder {
     }
 
     //This method will only accept input files that are formatted in proper way.
-    //Command line example: TypoCoderDiv2.exe -2 <TypoCoderDiv2.io
+    //Command line example: TypoCoderDiv2.exe -2 <TypoCoderDiv2IO.txt
     bool run_full_test() {
         int testCase, N, caseNo, correct=0;
         vector<int> rating;
